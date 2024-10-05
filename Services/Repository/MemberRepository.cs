@@ -8,7 +8,7 @@ namespace MadhurAPI.Services.Repository
 {
     public class MemberRepository : IMemberRepository
     {
-        private AppDbContext _dbContext;
+        private AppDbContext _dbContext; 
         public MemberRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
