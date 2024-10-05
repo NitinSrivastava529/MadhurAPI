@@ -1,0 +1,6 @@
+@MadhurAPI_HostAddress = http://localhost:5012
+
+GET {{MadhurAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
