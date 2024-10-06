@@ -35,13 +35,23 @@ namespace MadhurAPI.Services.Repository
             if (_dbContext.Members.Count(x => x.AadharNo == member.AadharNo) > 0)
                 return "AadharNo No Already Exists";
 
-            member.MemberId = "MEM00000" + _dbContext.Members.Count() + 1;
+            member.MemberId = "MEM" + $"{(_dbContext.Members.Count() + 1):D7}";
 
             var result = _dbContext.Members.AddAsync(member);
             await _dbContext.SaveChangesAsync();
-            return "Successfully Registered";
+            return "Successfully Registered:" + member.MemberId;
         }
-
+        public async Task<string> UpdateStatus(string memberId)
+        {
+            var result = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);          
+            if (result != null)
+            {
+                result.IsActive = result.IsActive.Equals('Y') ? 'N' : 'Y';
+                await _dbContext.SaveChangesAsync();
+               
+            }
+            return "Success";
+        }
         public async Task<Member> UpdateMember(Member member)
         {
             var result = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == member.MemberId);
@@ -63,10 +73,6 @@ namespace MadhurAPI.Services.Repository
                 _dbContext.Members.Remove(member);
                 await _dbContext.SaveChangesAsync();
             }
-        }
-        public void Dispose()
-        {
-            _dbContext?.Dispose();
-        }
+        }    
     }
 }

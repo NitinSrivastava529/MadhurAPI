@@ -2,12 +2,13 @@
 
 namespace MadhurAPI.Services.Interface
 {
-    public interface IMemberRepository : IDisposable
+    public interface IMemberRepository
     {
         Task<IEnumerable<Member>> GetMembers();
         Task<Member> GetMember(string memberId);
         Task<string> AddMember(Member member);
         Task<Member> UpdateMember(Member member);
-        void DeleteMember(string MemberId);
+        Task<string> UpdateStatus(string memberId);
+        void DeleteMember(string memberId);
     }
 }

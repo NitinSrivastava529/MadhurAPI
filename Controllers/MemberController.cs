@@ -32,7 +32,6 @@ namespace MadhurAPI.Controllers
             {
                 return BadRequest(ex);
             }
-
         }
 
         [HttpGet("GetMember/{memberId}")]
@@ -49,9 +48,8 @@ namespace MadhurAPI.Controllers
             }
             catch (Exception ex)
             {
-               return BadRequest(ex);
+                return BadRequest(ex);
             }
-           
         }
         [HttpPost("AddMember")]
         public async Task<IActionResult> AddMember([FromBody] Member member)
@@ -65,7 +63,6 @@ namespace MadhurAPI.Controllers
             {
                 return BadRequest(ex);
             }
-          
         }
         [HttpPut("UpdateMember")]
         public async Task<IActionResult> UpdateMember([FromBody] Member member)
@@ -79,7 +76,19 @@ namespace MadhurAPI.Controllers
             {
                 return BadRequest(ex);
             }
-          
+        }
+        [HttpPut("UpdateStatus/{memberid}")]
+        public async Task<IActionResult> UpdateStatus(string memberid)
+        {
+            try
+            {
+                _repository.UpdateStatus(memberid);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
         [HttpDelete("DeleteMember/{memberId}")]
         public async Task<IActionResult> DeleteMember(string memberId)
