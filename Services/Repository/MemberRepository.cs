@@ -8,7 +8,7 @@ namespace MadhurAPI.Services.Repository
 {
     public class MemberRepository : IMemberRepository
     {
-        private AppDbContext _dbContext; 
+        private AppDbContext _dbContext;
         public MemberRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -18,17 +18,28 @@ namespace MadhurAPI.Services.Repository
             var members = await _dbContext.Members.ToListAsync();
             return members;
         }
-        public async Task<Member> GetMember(string MemberId)
+        public async Task<Member> GetMember(string memberId)
         {
-            var member = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == MemberId);
+            var member = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);
             return member;
         }
 
-        public async Task<Member> AddMember(Member member)
+        public async Task<string> AddMember(Member member)
         {
+            if (_dbContext.Members.Count(x => x.RegPin == member.RegPin) > 0)
+                return "Registration Pin Not Valid";
+
+            if (_dbContext.Members.Count(x => x.MobileNo == member.MobileNo) > 0)
+                return "Mobile No Already Exists";
+
+            if (_dbContext.Members.Count(x => x.AadharNo == member.AadharNo) > 0)
+                return "AadharNo No Already Exists";
+
+            member.MemberId = "MEM00000" + _dbContext.Members.Count() + 1;
+
             var result = _dbContext.Members.AddAsync(member);
             await _dbContext.SaveChangesAsync();
-            return member;
+            return "Successfully Registered";
         }
 
         public async Task<Member> UpdateMember(Member member)
@@ -44,9 +55,9 @@ namespace MadhurAPI.Services.Repository
             await _dbContext.SaveChangesAsync();
             return member;
         }
-        public async void DeleteMember(string MemberId)
+        public async void DeleteMember(string memberId)
         {
-            var member = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == MemberId);
+            var member = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);
             if (member != null)
             {
                 _dbContext.Members.Remove(member);

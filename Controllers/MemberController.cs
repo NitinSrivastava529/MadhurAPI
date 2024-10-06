@@ -19,40 +19,101 @@ namespace MadhurAPI.Controllers
         [HttpGet("GetMembers")]
         public async Task<IActionResult> GetMembers()
         {
-            var result = await _repository.GetMembers();
-            if (result == null)
+            try
             {
-                return NotFound();
+                var result = await _repository.GetMembers();
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
         }
 
-        [HttpGet("GetMember/{id}")]
+        [HttpGet("GetMember/{memberId}")]
         public async Task<IActionResult> GetMember(string memberId)
         {
-            var result = await _repository.GetMember(memberId);
-            if (result == null)
+            try
             {
-                return NotFound();
+                var result = await _repository.GetMember(memberId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+               return BadRequest(ex);
+            }
+           
         }
         [HttpPost("AddMember")]
         public async Task<IActionResult> AddMember([FromBody] Member member)
         {
-            var result = await _repository.AddMember(member);
-            return Ok(result);
+            try
+            {
+                var result = await _repository.AddMember(member);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+          
         }
         [HttpPut("UpdateMember")]
         public async Task<IActionResult> UpdateMember([FromBody] Member member)
         {
-            var result = await _repository.UpdateMember(member);
-            return Ok(result);
+            try
+            {
+                var result = await _repository.UpdateMember(member);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+          
         }
-        [HttpDelete("DeleteMember")]
-        public void DeleteMember(string memberId)
+        [HttpDelete("DeleteMember/{memberId}")]
+        public async Task<IActionResult> DeleteMember(string memberId)
         {
-            _repository.DeleteMember(memberId);
+            try
+            {
+                _repository.DeleteMember(memberId);
+                return Ok(true);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
     }
 }
+
+
+//{
+//    "autoId": 0,
+//  "regPin": "MAC0001",
+//  "refId": "MEM00011",
+//  "memberId": "MEM0001",
+//  "memberName": "Nitin Kumar",
+//  "password": "123",
+//  "mobileNo": "9670244590",
+//  "dob": "1993-05-03",
+//  "aadharNo": "834099440938",
+//  "address": "Amethi",
+//  "state": "Uttar Pradesh",
+//  "city": "Amethi",
+//  "pinCode": "229801",
+//  "nominee": "Ankit",
+//  "relationWithNominee": "Brother",
+//  "isActive": "Y",
+//  "creationDate": "2024-10-06T11:37:32.637Z"
+//}
