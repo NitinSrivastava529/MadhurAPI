@@ -10,5 +10,6 @@ namespace MadhurAPI.Data
             
         }
         public DbSet<Member> Members { get; set; }
+        public DbSet<RegKey> RegKeys { get; set; }
     }
 }

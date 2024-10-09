@@ -10,5 +10,6 @@ namespace MadhurAPI.Services.Interface
         Task<Member> UpdateMember(Member member);
         Task<string> UpdateStatus(string memberId);
         void DeleteMember(string memberId);
+        Task<string> GenerateKey();
     }
 }

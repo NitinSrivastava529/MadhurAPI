@@ -43,12 +43,12 @@ namespace MadhurAPI.Services.Repository
         }
         public async Task<string> UpdateStatus(string memberId)
         {
-            var result = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);          
+            var result = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);
             if (result != null)
             {
                 result.IsActive = result.IsActive.Equals('Y') ? 'N' : 'Y';
                 await _dbContext.SaveChangesAsync();
-               
+
             }
             return "Success";
         }
@@ -73,6 +73,17 @@ namespace MadhurAPI.Services.Repository
                 _dbContext.Members.Remove(member);
                 await _dbContext.SaveChangesAsync();
             }
-        }    
+        }
+        public async Task<string> GenerateKey()
+        {
+            Random rnd = new Random();
+            string AllowedString = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
+            char[] chars = new char[10];
+            for (int i = 0; i < 10; i++)
+            {
+                chars[i] = AllowedString[rnd.Next(0, AllowedString.Length)];
+            }
+            return new string(chars).ToLower();
+        }
     }
 }

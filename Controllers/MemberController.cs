@@ -16,6 +16,24 @@ namespace MadhurAPI.Controllers
             _repository = repository;
         }
 
+        [HttpGet("GenerateKey")]
+        public async Task<IActionResult> GenerateKey()
+        {
+            try
+            {
+                var data = await _repository.GenerateKey();
+                if (data == null)
+                {
+                    return NotFound("");
+                }
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+
+        }
         [HttpGet("GetMembers")]
         public async Task<IActionResult> GetMembers()
         {
