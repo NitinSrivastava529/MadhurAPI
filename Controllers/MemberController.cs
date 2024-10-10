@@ -51,7 +51,23 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
-
+        [HttpGet("RegKeys")]
+        public async Task<IActionResult> RegKeys()
+        {
+            try
+            {
+                var result = await _repository.RegKeys();
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
         [HttpGet("GetMember/{memberId}")]
         public async Task<IActionResult> GetMember(string memberId)
         {
@@ -100,7 +116,7 @@ namespace MadhurAPI.Controllers
         {
             try
             {
-                _repository.UpdateStatus(memberid);
+               await _repository.UpdateStatus(memberid);
                 return Ok();
             }
             catch (Exception ex)
