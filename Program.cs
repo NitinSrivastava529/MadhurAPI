@@ -12,6 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 });
 builder.Services.AddControllers();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.AddScoped<IAuthenticationRepository,AuthenticationRepository>();
 builder.Services.AddCors(option => option.AddPolicy("MadhurCorsPolicy", policy =>
 {
     policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();

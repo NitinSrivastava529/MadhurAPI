@@ -56,6 +56,6 @@ namespace MadhurAPI.Models
         public char? IsActive { get; set; }='Y';
 
         [Column(TypeName = "datetime")]
-        public DateTime? CreationDate { get; set; } 
+        public DateTime? CreationDate { get; set; } = DateTime.UtcNow;
     }
 }

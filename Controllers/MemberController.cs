@@ -123,20 +123,7 @@ namespace MadhurAPI.Controllers
             {
                 return BadRequest(ex);
             }
-        }
-        [HttpDelete("DeleteMember/{memberId}")]
-        public async Task<IActionResult> DeleteMember(string memberId)
-        {
-            try
-            {
-                _repository.DeleteMember(memberId);
-                return Ok(true);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
+        }  
     }
 }
 
