@@ -12,6 +12,10 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 });
 builder.Services.AddControllers();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.AddCors(option => option.AddPolicy("MadhurCorsPolicy", policy =>
+{
+    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+}));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -24,9 +28,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("MadhurCorsPolicy");
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();

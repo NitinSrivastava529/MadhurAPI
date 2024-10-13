@@ -1,5 +1,6 @@
 ﻿using MadhurAPI.Data;
 using MadhurAPI.Models;
+using MadhurAPI.Models.DTO;
 using MadhurAPI.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -28,7 +29,28 @@ namespace MadhurAPI.Services.Repository
             var member = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);
             return member;
         }
-
+        public async Task<Response> Login(LoginDTO obj)
+        {
+            var response=new Response();
+            if(_dbContext.Members.Count(x => x.MemberId == obj.MemberId && x.Password == obj.Password) == 0)
+            {
+                response.message = "MemberId or Password is Incorrect.";
+                response.result = false;
+                return response;
+            }
+            if (_dbContext.Members.Count(x => x.MemberId == obj.MemberId && x.IsActive == 'Y') == 0)
+            {
+                response.message = "Member is blocked by Admin.";
+                response.result = false;
+                return response;
+            }          
+            if(_dbContext.Members.Count(x => x.MemberId == obj.MemberId && x.Password==obj.Password && x.IsActive == 'Y') > 0)
+            {
+                response.message = "Login Successful.";
+                response.result = true;             
+            }
+            return response;
+        }
         public async Task<string> AddMember(Member member)
         {
             if (_dbContext.RegKeys.Count(x => x.Key == member.RegPin) == 0)
