@@ -4,6 +4,7 @@ using MadhurAPI.Models.DTO;
 using MadhurAPI.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
+using System.Linq;
 
 namespace MadhurAPI.Services.Repository
 {
@@ -23,6 +24,16 @@ namespace MadhurAPI.Services.Repository
         {
             var RegKeys = await _dbContext.RegKeys.ToListAsync();
             return RegKeys;
+        }
+        public async Task<IEnumerable<StateMaster>> GetState()
+        {
+            var state = await _dbContext.StateMaster.ToListAsync();
+            return state;
+        }
+        public async Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code)
+        {
+            var district = await _dbContext.DistrictMaster.Where(x => x.state_code == state_code).ToListAsync();
+            return district;
         }
         public async Task<Member> GetMember(string memberId)
         {

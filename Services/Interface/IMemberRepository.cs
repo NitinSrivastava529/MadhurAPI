@@ -8,6 +8,8 @@ namespace MadhurAPI.Services.Interface
         Task<IEnumerable<Member>> GetMembers();
         Task<IEnumerable<RegKey>> RegKeys();
         Task<Member> GetMember(string memberId);
+        Task<IEnumerable<StateMaster>> GetState();
+        Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code);
         Task<string> AddMember(Member member);
         Task<Member> UpdateMember(Member member);
         Task<string> UpdateStatus(string memberId);      

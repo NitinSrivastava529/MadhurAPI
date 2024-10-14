@@ -11,5 +11,7 @@ namespace MadhurAPI.Data
         }
         public DbSet<Member> Members { get; set; }
         public DbSet<RegKey> RegKeys { get; set; }
+        public DbSet<StateMaster> StateMaster { get; set; }
+        public DbSet<DistrictMaster> DistrictMaster { get; set; }
     }
 }
