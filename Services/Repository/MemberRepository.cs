@@ -22,7 +22,7 @@ namespace MadhurAPI.Services.Repository
         }
         public async Task<IEnumerable<RegKey>> RegKeys()
         {
-            var RegKeys = await _dbContext.RegKeys.ToListAsync();
+            var RegKeys = await _dbContext.RegKeys.OrderByDescending(x=>x.AuotId).ToListAsync();
             return RegKeys;
         }
         public async Task<IEnumerable<StateMaster>> GetState()
