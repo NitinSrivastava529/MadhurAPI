@@ -24,7 +24,7 @@ namespace MadhurAPI.Controllers
                 var data = await _repository.GenerateKey();
                 if (data == null)
                 {
-                    return NotFound("");
+                    return NotFound("Data Not Found");
                 }
                 return Ok(data);
             }

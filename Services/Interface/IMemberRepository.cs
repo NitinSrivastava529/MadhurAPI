@@ -12,7 +12,7 @@ namespace MadhurAPI.Services.Interface
         Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code);
         Task<string> AddMember(Member member);
         Task<Member> UpdateMember(Member member);
-        Task<string> UpdateStatus(string memberId);      
-        Task<string> GenerateKey();
+        Task<string> UpdateStatus(string memberId);
+        Task<Response> GenerateKey();
     }
 }

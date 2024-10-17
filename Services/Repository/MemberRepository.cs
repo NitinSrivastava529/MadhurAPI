@@ -92,8 +92,9 @@ namespace MadhurAPI.Services.Repository
             await _dbContext.SaveChangesAsync();
             return member;
         }  
-        public async Task<string> GenerateKey()
+        public async Task<Response> GenerateKey()
         {
+            var response = new Response();
             string key = NewRegKey();
             int count = await _dbContext.RegKeys.CountAsync(x => x.Key == key) + await _dbContext.Members.CountAsync(x => x.RegPin == key);
             if (count == 0)
@@ -103,6 +104,8 @@ namespace MadhurAPI.Services.Repository
                     Key = key,
                     CreationDate = DateTime.Now
                 };
+                response.message = key;
+                response.result = true;
                 await _dbContext.RegKeys.AddAsync(keys);
                 await _dbContext.SaveChangesAsync();
             }
@@ -110,7 +113,7 @@ namespace MadhurAPI.Services.Repository
             {
                 await GenerateKey();
             }
-            return key;
+            return response;
         }
         public string NewRegKey()
         {
