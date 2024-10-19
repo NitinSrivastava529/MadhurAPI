@@ -7,5 +7,6 @@ namespace MadhurAPI.Services.Interface
     {
         Task<Response> Login(LoginDTO obj);
         Task<Response> ChangePassword(ChangePasswordDTO obj);
+        Task<ForgetPasswordDTO> ForgetPassword(string MobileNo, string dob);
     }
 }

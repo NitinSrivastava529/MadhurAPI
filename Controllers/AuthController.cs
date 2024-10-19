@@ -45,5 +45,12 @@ namespace MadhurAPI.Controllers
             }
             return response;
         }
+        [HttpGet("ForgetPassword/{MobileNo}/{dob}")]
+        public async Task<ForgetPasswordDTO> ForgetPassword(string MobileNo,string dob)
+        {           
+            ForgetPasswordDTO response = await _repository.ForgetPassword(MobileNo, dob);            
+            return response;
+        }
+
     }
 }

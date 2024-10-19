@@ -39,7 +39,7 @@ namespace MadhurAPI.Services.Repository
         {
             var member = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);
             return member;
-        }
+        }    
         public async Task<string> AddMember(Member member)
         {
             if (_dbContext.RegKeys.Count(x => x.Key == member.RegPin) == 0)
