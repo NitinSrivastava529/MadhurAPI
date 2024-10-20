@@ -66,7 +66,7 @@ namespace MadhurAPI.Services.Repository
 
                 await _dbContext.SaveChangesAsync();
             }
-            return "Successfully Registered = MemberId : " + member.MemberId+" | Password : "+member.Password;
+            return "Successfully Registered.\n Login Id : " + member.MemberId+ " \n Password : " + member.Password;
         }
         public async Task<string> UpdateStatus(string memberId)
         {
