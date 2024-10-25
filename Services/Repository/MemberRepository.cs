@@ -15,14 +15,76 @@ namespace MadhurAPI.Services.Repository
         {
             _dbContext = dbContext;
         }
-        public async Task<IEnumerable<Member>> GetMembers()
+        public async Task<IEnumerable<MemberDTO>> GetMembers()
         {
-            var members = await _dbContext.Members.ToListAsync();
+            var members = await (from mem in _dbContext.Members
+                                 join rf in _dbContext.Members on mem.RefId equals rf.MemberId
+                                 orderby mem.AutoId descending
+                                 select new MemberDTO
+                                 {
+                                     AutoId = mem.AutoId,
+                                     RegPin = mem.RegPin,
+                                     RefId = mem.RefId,
+                                     RefName = rf.MemberName,
+                                     MemberId = mem.MemberId,
+                                     MemberName = mem.MemberName,
+                                     Password = mem.Password,
+                                     MobileNo = mem.MobileNo,
+                                     dob = mem.dob,
+                                     AadharNo = mem.AadharNo,
+                                     Address = mem.Address,
+                                     State = mem.State,
+                                     City = mem.City,
+                                     PinCode = mem.PinCode,
+                                     Nominee = mem.Nominee,
+                                     RelationWithNominee = mem.RelationWithNominee,
+                                     IsActive = mem.IsActive,
+                                     CreationDate = mem.CreationDate
+                                 }).ToListAsync();
             return members;
+        }
+        public async Task<IEnumerable<MemberDTO>> GetTodayMembers()
+        {
+            var members = await (from mem in _dbContext.Members
+                                 join rf in _dbContext.Members on mem.RefId equals rf.MemberId
+                                 where mem.CreationDate.Value.Date==DateTime.UtcNow.Date
+                                 select new MemberDTO
+                                 {
+                                     AutoId = mem.AutoId,
+                                     RegPin = mem.RegPin,
+                                     RefId = mem.RefId,
+                                     RefName = rf.MemberName,
+                                     MemberId = mem.MemberId,
+                                     MemberName = mem.MemberName,
+                                     Password = mem.Password,
+                                     MobileNo = mem.MobileNo,
+                                     dob = mem.dob,
+                                     AadharNo = mem.AadharNo,
+                                     Address = mem.Address,
+                                     State = mem.State,
+                                     City = mem.City,
+                                     PinCode = mem.PinCode,
+                                     Nominee = mem.Nominee,
+                                     RelationWithNominee = mem.RelationWithNominee,
+                                     IsActive = mem.IsActive,
+                                     CreationDate = mem.CreationDate
+                                 }).ToListAsync();
+            return members;
+        }
+        public async Task<TotalCount> TotalCount()
+        {
+            var result = new TotalCount()
+            {
+                Today = await _dbContext.Members.CountAsync(x => x.CreationDate.Value.Date == DateTime.UtcNow.Date),
+                Total = await _dbContext.Members.CountAsync(),
+                Active = await _dbContext.Members.CountAsync(x => x.IsActive == 'Y'),
+                Deactive = await _dbContext.Members.CountAsync(x => x.IsActive =='N')
+            };
+            return result;
         }
         public async Task<IEnumerable<RegKey>> RegKeys()
         {
-            var RegKeys = await _dbContext.RegKeys.OrderByDescending(x=>x.AuotId).ToListAsync();
+            var RegKeys = await _dbContext.RegKeys.OrderByDescending(x => x.AuotId).ToListAsync();
             return RegKeys;
         }
         public async Task<IEnumerable<StateMaster>> GetState()
@@ -39,20 +101,33 @@ namespace MadhurAPI.Services.Repository
         {
             var member = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);
             return member;
-        }    
-        public async Task<string> AddMember(Member member)
+        }
+        public async Task<RegistrationDTO> AddMember(Member member)
         {
+            var response = new RegistrationDTO();
             if (_dbContext.RegKeys.Count(x => x.Key == member.RegPin) == 0)
-                return "Registration Pin Not Valid";
+            {
+                response.Message = "Registration Pin Not Valid";
+                return response;
+            }
 
             if (_dbContext.Members.Count(x => x.RegPin == member.RegPin) > 0)
-                return "This Registration Pin Already Used";
+            {
+                response.Message = "This Registration Pin Already Used";
+                return response;
+            }
 
             if (_dbContext.Members.Count(x => x.MobileNo == member.MobileNo) > 0)
-                return "Mobile No Already Exists";
+            {
+                response.Message = "Mobile No Already Exists";
+                return response;
+            }
 
             if (_dbContext.Members.Count(x => x.AadharNo == member.AadharNo) > 0)
-                return "AadharNo No Already Exists";
+            {
+                response.Message = "AadharNo No Already Exists";
+                return response;
+            }
 
             member.MemberId = "MEM" + $"{(_dbContext.Members.Count() + 1):D7}";
 
@@ -66,7 +141,10 @@ namespace MadhurAPI.Services.Repository
 
                 await _dbContext.SaveChangesAsync();
             }
-            return "Successfully Registered.\n Login Id : " + member.MemberId+ " \n Password : " + member.Password;
+            response.MemberId = member.MemberId;
+            response.Password = member.Password;
+            response.Message = "Successfully Registered.\n Login Id : " + member.MemberId + " \n Password : " + member.Password;
+            return response;
         }
         public async Task<string> UpdateStatus(string memberId)
         {
@@ -91,7 +169,7 @@ namespace MadhurAPI.Services.Repository
             }
             await _dbContext.SaveChangesAsync();
             return member;
-        }  
+        }
         public async Task<Response> GenerateKey()
         {
             var response = new Response();

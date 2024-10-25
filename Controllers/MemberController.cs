@@ -1,4 +1,5 @@
 ﻿using MadhurAPI.Models;
+using MadhurAPI.Models.DTO;
 using MadhurAPI.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,23 @@ namespace MadhurAPI.Controllers
             {
                 return BadRequest(ex);
             }
-
+        }
+        [HttpGet("TotalCount")]
+        public async Task<IActionResult> TotalCount()
+        {
+            try
+            {
+                var data = await _repository.TotalCount();
+                if (data == null)
+                {
+                    return NotFound("Data Not Found");
+                }
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
         }
         [HttpGet("GetMembers")]
         public async Task<IActionResult> GetMembers()
@@ -40,6 +57,23 @@ namespace MadhurAPI.Controllers
             try
             {
                 var result = await _repository.GetMembers();
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+        [HttpGet("GetTodayMembers")]
+        public async Task<IActionResult> GetTodayMembers()
+        {
+            try
+            {
+                var result = await _repository.GetTodayMembers();
                 if (result == null)
                 {
                     return NotFound();
@@ -124,7 +158,7 @@ namespace MadhurAPI.Controllers
         {
             try
             {
-                var result = await _repository.AddMember(member);
+                RegistrationDTO result = await _repository.AddMember(member);
                 return Ok(result);
             }
             catch (Exception ex)

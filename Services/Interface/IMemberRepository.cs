@@ -5,12 +5,14 @@ namespace MadhurAPI.Services.Interface
 {
     public interface IMemberRepository
     {
-        Task<IEnumerable<Member>> GetMembers();
+        Task<IEnumerable<MemberDTO>> GetMembers();
         Task<IEnumerable<RegKey>> RegKeys();
+        Task<TotalCount> TotalCount();
         Task<Member> GetMember(string memberId);
         Task<IEnumerable<StateMaster>> GetState();
+        Task<IEnumerable<MemberDTO>> GetTodayMembers();
         Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code);
-        Task<string> AddMember(Member member);
+        Task<RegistrationDTO> AddMember(Member member);
         Task<Member> UpdateMember(Member member);
         Task<string> UpdateStatus(string memberId);
         Task<Response> GenerateKey();
