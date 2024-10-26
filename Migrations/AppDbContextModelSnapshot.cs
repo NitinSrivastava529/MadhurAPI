@@ -121,6 +121,10 @@ namespace MadhurAPI.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("IsCopy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
+
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnType("nvarchar(10)");

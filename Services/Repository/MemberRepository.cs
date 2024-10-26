@@ -47,7 +47,7 @@ namespace MadhurAPI.Services.Repository
         {
             var members = await (from mem in _dbContext.Members
                                  join rf in _dbContext.Members on mem.RefId equals rf.MemberId
-                                 where mem.CreationDate.Value.Date==DateTime.UtcNow.Date
+                                 where mem.CreationDate.Value.Date == DateTime.UtcNow.Date
                                  select new MemberDTO
                                  {
                                      AutoId = mem.AutoId,
@@ -78,7 +78,7 @@ namespace MadhurAPI.Services.Repository
                 Today = await _dbContext.Members.CountAsync(x => x.CreationDate.Value.Date == DateTime.UtcNow.Date),
                 Total = await _dbContext.Members.CountAsync(),
                 Active = await _dbContext.Members.CountAsync(x => x.IsActive == 'Y'),
-                Deactive = await _dbContext.Members.CountAsync(x => x.IsActive =='N')
+                Deactive = await _dbContext.Members.CountAsync(x => x.IsActive == 'N')
             };
             return result;
         }
@@ -169,6 +169,12 @@ namespace MadhurAPI.Services.Repository
             }
             await _dbContext.SaveChangesAsync();
             return member;
+        }
+        public async Task<bool> UpdateRegKeys(int[] AutoId)
+        {
+            _dbContext.RegKeys.Where(x => AutoId.Contains(x.AuotId)).ToList().ForEach(a => a.IsCopy = 'Y');
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
         public async Task<Response> GenerateKey()
         {

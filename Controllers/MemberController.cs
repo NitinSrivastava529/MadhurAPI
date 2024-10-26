@@ -191,7 +191,13 @@ namespace MadhurAPI.Controllers
             {
                 return BadRequest(ex);
             }
-        }  
+        }
+        [HttpPut("UpdateRegKeys")]
+        public async Task<IActionResult> UpdateRegKeys(int[] AutotId)
+        {
+            await _repository.UpdateRegKeys(AutotId);
+            return Ok();
+        }
     }
 }
 

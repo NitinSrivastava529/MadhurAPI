@@ -14,6 +14,7 @@ namespace MadhurAPI.Services.Interface
         Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code);
         Task<RegistrationDTO> AddMember(Member member);
         Task<Member> UpdateMember(Member member);
+        Task<bool> UpdateRegKeys(int[] AutoId);
         Task<string> UpdateStatus(string memberId);
         Task<Response> GenerateKey();
     }

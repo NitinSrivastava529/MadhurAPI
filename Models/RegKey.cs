@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MadhurAPI.Models
@@ -11,6 +12,7 @@ namespace MadhurAPI.Models
         public int AuotId { get; set; }
         [Column(TypeName = "nvarchar(10)")]
         public string Key { get; set; }
+        public char IsCopy { get; set; }= 'N';
         public DateTime CreationDate { get; set; }
     }
 }
