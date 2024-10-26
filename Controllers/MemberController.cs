@@ -193,7 +193,7 @@ namespace MadhurAPI.Controllers
             }
         }
         [HttpPut("UpdateRegKeys")]
-        public async Task<IActionResult> UpdateRegKeys(int[] AutotId)
+        public async Task<IActionResult> UpdateRegKeys([FromBody] int[] AutotId)
         {
             await _repository.UpdateRegKeys(AutotId);
             return Ok();
