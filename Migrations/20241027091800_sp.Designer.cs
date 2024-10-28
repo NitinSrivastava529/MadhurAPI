@@ -4,6 +4,7 @@ using MadhurAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MadhurAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241027091800_sp")]
+    partial class sp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,17 +24,6 @@ namespace MadhurAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("MadhurAPI.Models.DTO.LevelCount", b =>
-                {
-                    b.Property<int?>("Level")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Total")
-                        .HasColumnType("int");
-
-                    b.ToTable("LevelCount");
-                });
 
             modelBuilder.Entity("MadhurAPI.Models.DistrictMaster", b =>
                 {
@@ -124,21 +116,15 @@ namespace MadhurAPI.Migrations
             modelBuilder.Entity("MadhurAPI.Models.RecursiveData", b =>
                 {
                     b.Property<string>("MemberId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MemberName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RefId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReferralName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("city")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("state")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("RecursiveData");

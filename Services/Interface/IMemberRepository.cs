@@ -17,5 +17,7 @@ namespace MadhurAPI.Services.Interface
         Task<bool> UpdateRegKeys(int[] AutoId);
         Task<string> UpdateStatus(string memberId);
         Task<Response> GenerateKey();
+        Task<IEnumerable<RecursiveData>> MemberRecursive(string MemberId, string Logic);
+        Task<IEnumerable<LevelCount>> LevelCount(string MemberId);
     }
 }

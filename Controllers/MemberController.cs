@@ -68,6 +68,18 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
+        [HttpGet("LevelCount")]
+        public async Task<IActionResult> LevelCount(string MemberId)
+        {
+            var result = await _repository.LevelCount(MemberId);
+            return Ok(result);
+        }
+        [HttpGet("MemberRecursive")]
+        public async Task<IActionResult> MemberRecursive(string MemberId, string Logic)
+        {
+            var result = await _repository.MemberRecursive(MemberId, Logic);
+            return Ok(result);
+        }
         [HttpGet("GetTodayMembers")]
         public async Task<IActionResult> GetTodayMembers()
         {
@@ -184,7 +196,7 @@ namespace MadhurAPI.Controllers
         {
             try
             {
-               await _repository.UpdateStatus(memberid);
+                await _repository.UpdateStatus(memberid);
                 return Ok();
             }
             catch (Exception ex)

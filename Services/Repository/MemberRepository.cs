@@ -2,6 +2,7 @@
 using MadhurAPI.Models;
 using MadhurAPI.Models.DTO;
 using MadhurAPI.Services.Interface;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.Linq;
@@ -72,7 +73,7 @@ namespace MadhurAPI.Services.Repository
             return members;
         }
         public async Task<TotalCount> TotalCount()
-        {
+        {           
             var result = new TotalCount()
             {
                 Today = await _dbContext.Members.CountAsync(x => x.CreationDate.Value.Date == DateTime.UtcNow.Date),
@@ -209,6 +210,18 @@ namespace MadhurAPI.Services.Repository
                 chars[i] = AllowedString[rnd.Next(0, AllowedString.Length)];
             }
             return new string(chars).ToLower();
+        }
+        //Store Procedure Recursive Data
+        public async Task<IEnumerable<LevelCount>> LevelCount(string MemberId)
+        {
+            string Logic = "LevelTotalCount";
+            var data =await _dbContext.LevelCount.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{Logic}").ToListAsync();
+            return data;
+        }
+        public async Task<IEnumerable<RecursiveData>> MemberRecursive(string MemberId, string Logic)
+        {
+            var data = await _dbContext.RecursiveData.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{Logic}").ToListAsync();
+            return data;
         }
     }
 }
