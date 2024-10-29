@@ -213,14 +213,18 @@ namespace MadhurAPI.Services.Repository
         }
         //Store Procedure Recursive Data
         public async Task<IEnumerable<LevelCount>> LevelCount(string MemberId)
-        {
-            string Logic = "LevelTotalCount";
-            var data =await _dbContext.LevelCount.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{Logic}").ToListAsync();
+        {        
+            var data =await _dbContext.LevelCount.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},LevelTotalCount").ToListAsync();
             return data;
         }
-        public async Task<IEnumerable<RecursiveData>> MemberRecursive(string MemberId, string Logic)
+        public async Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId)
         {
-            var data = await _dbContext.RecursiveData.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{Logic}").ToListAsync();
+            var data = await _dbContext.AllSelfMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},AllSelfMember").ToListAsync();
+            return data;
+        }
+        public async Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId)
+        {
+            var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},AllMember").ToListAsync();
             return data;
         }
     }

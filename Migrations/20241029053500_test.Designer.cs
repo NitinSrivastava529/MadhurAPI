@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MadhurAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241027091800_sp")]
-    partial class sp
+    [Migration("20241029053500_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,23 +111,6 @@ namespace MadhurAPI.Migrations
                     b.HasKey("AutoId");
 
                     b.ToTable("Members");
-                });
-
-            modelBuilder.Entity("MadhurAPI.Models.RecursiveData", b =>
-                {
-                    b.Property<string>("MemberId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MemberName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RefId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("RecursiveData");
                 });
 
             modelBuilder.Entity("MadhurAPI.Models.RegKey", b =>

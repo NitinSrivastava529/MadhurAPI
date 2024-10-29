@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MadhurAPI.Models.DTO
 {
+    [NotMapped]
     [Keyless]
     public class LevelCount
     {

@@ -1,15 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MadhurAPI.Models
+namespace MadhurAPI.Models.DTO
 {
+    [NotMapped]
     [Keyless]
-    public class RecursiveData
+    public class AllMemberDTO
     {
         public string? MemberId { get; set; }
         public string? MemberName { get; set; }
         public string? RefId { get; set; }
         public string? ReferralName { get; set; }
         public string? state { get; set; }
-        public string? city { get; set; }   
+        public string? city { get; set; }    
     }
 }

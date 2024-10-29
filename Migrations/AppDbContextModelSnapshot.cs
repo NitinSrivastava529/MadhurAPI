@@ -22,6 +22,49 @@ namespace MadhurAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("MadhurAPI.Models.DTO.AllMemberDTO", b =>
+                {
+                    b.Property<string>("MemberId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MemberName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RefId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReferralName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("city")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("state")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("AllMember");
+                });
+
+            modelBuilder.Entity("MadhurAPI.Models.DTO.AllSelfMemberDTO", b =>
+                {
+                    b.Property<string>("MemberId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MemberName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("city")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("state")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("total")
+                        .HasColumnType("int");
+
+                    b.ToTable("AllSelfMember");
+                });
+
             modelBuilder.Entity("MadhurAPI.Models.DTO.LevelCount", b =>
                 {
                     b.Property<int?>("Level")
@@ -119,29 +162,6 @@ namespace MadhurAPI.Migrations
                     b.HasKey("AutoId");
 
                     b.ToTable("Members");
-                });
-
-            modelBuilder.Entity("MadhurAPI.Models.RecursiveData", b =>
-                {
-                    b.Property<string>("MemberId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MemberName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RefId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReferralName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("city")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("state")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("RecursiveData");
                 });
 
             modelBuilder.Entity("MadhurAPI.Models.RegKey", b =>
