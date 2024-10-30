@@ -11,7 +11,7 @@ namespace MadhurAPI.Models.DTO
         public string? MemberName { get; set; }
         public string? RefId { get; set; }
         public string? ReferralName { get; set; }
-        public string? state { get; set; }
+        public string? MobileNo { get; set; }
         public string? city { get; set; }    
     }
 }

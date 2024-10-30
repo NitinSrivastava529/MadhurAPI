@@ -80,6 +80,12 @@ namespace MadhurAPI.Controllers
             var result = await _repository.AllSelfMember(MemberId);
             return Ok(result);
         }
+        [HttpGet("TodayMember")]
+        public async Task<IActionResult> TodayMember(string MemberId)
+        {
+            var result = await _repository.TodayMember(MemberId);
+            return Ok(result);
+        }
         [HttpGet("AllMember")]
         public async Task<IActionResult> AllMember(string MemberId)
         {
@@ -218,24 +224,3 @@ namespace MadhurAPI.Controllers
         }
     }
 }
-
-
-//{
-//    "autoId": 0,
-//  "regPin": "MAC0001",
-//  "refId": "MEM00011",
-//  "memberId": "MEM0001",
-//  "memberName": "Nitin Kumar",
-//  "password": "123",
-//  "mobileNo": "9670244590",
-//  "dob": "1993-05-03",
-//  "aadharNo": "834099440938",
-//  "address": "Amethi",
-//  "state": "Uttar Pradesh",
-//  "city": "Amethi",
-//  "pinCode": "229801",
-//  "nominee": "Ankit",
-//  "relationWithNominee": "Brother",
-//  "isActive": "Y",
-//  "creationDate": "2024-10-06T11:37:32.637Z"
-//}

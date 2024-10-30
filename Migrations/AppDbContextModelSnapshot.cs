@@ -30,6 +30,9 @@ namespace MadhurAPI.Migrations
                     b.Property<string>("MemberName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MobileNo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("RefId")
                         .HasColumnType("nvarchar(max)");
 
@@ -37,9 +40,6 @@ namespace MadhurAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("city")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("state")
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("AllMember");
@@ -53,10 +53,10 @@ namespace MadhurAPI.Migrations
                     b.Property<string>("MemberName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("city")
+                    b.Property<string>("MobileNo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("state")
+                    b.Property<string>("city")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("total")
