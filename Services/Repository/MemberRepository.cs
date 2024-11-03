@@ -1,6 +1,7 @@
 ﻿using MadhurAPI.Data;
 using MadhurAPI.Models;
 using MadhurAPI.Models.DTO;
+using System;
 using MadhurAPI.Services.Interface;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -16,64 +17,39 @@ namespace MadhurAPI.Services.Repository
         {
             _dbContext = dbContext;
         }
-        public async Task<IEnumerable<MemberDTO>> GetMembers()
+        public async Task<IEnumerable<MemberDTO>> GetMembers(FilterDTO obj)
         {
             var members = await (from mem in _dbContext.Members
-                                 join rf in _dbContext.Members on mem.RefId equals rf.MemberId
-                                 orderby mem.AutoId descending
+                                 where (!string.IsNullOrEmpty(obj.Mobile) ? mem.MobileNo.Contains(obj.Mobile) : mem.MobileNo != null)
+                                 orderby mem.RefId
                                  select new MemberDTO
                                  {
-                                     AutoId = mem.AutoId,
                                      RegPin = mem.RegPin,
-                                     RefId = mem.RefId,
-                                     RefName = rf.MemberName,
+                                     RefName = mem.RefId,
                                      MemberId = mem.MemberId,
                                      MemberName = mem.MemberName,
-                                     Password = mem.Password,
                                      MobileNo = mem.MobileNo,
-                                     dob = mem.dob,
-                                     AadharNo = mem.AadharNo,
-                                     Address = mem.Address,
-                                     State = mem.State,
-                                     City = mem.City,
-                                     PinCode = mem.PinCode,
-                                     Nominee = mem.Nominee,
-                                     RelationWithNominee = mem.RelationWithNominee,
-                                     IsActive = mem.IsActive,
                                      CreationDate = mem.CreationDate
-                                 }).ToListAsync();
+                                 }).AsNoTracking().Skip((obj.PageNo - 1) * obj.PageSize).Take(obj.PageSize).ToListAsync();
             return members;
         }
         public async Task<IEnumerable<MemberDTO>> GetTodayMembers()
         {
-            var members = await (from mem in _dbContext.Members
-                                 join rf in _dbContext.Members on mem.RefId equals rf.MemberId
+            var members = await (from mem in _dbContext.Members                               
                                  where mem.CreationDate.Value.Date == DateTime.UtcNow.Date
                                  select new MemberDTO
                                  {
-                                     AutoId = mem.AutoId,
                                      RegPin = mem.RegPin,
                                      RefId = mem.RefId,
-                                     RefName = rf.MemberName,
                                      MemberId = mem.MemberId,
                                      MemberName = mem.MemberName,
-                                     Password = mem.Password,
                                      MobileNo = mem.MobileNo,
-                                     dob = mem.dob,
-                                     AadharNo = mem.AadharNo,
-                                     Address = mem.Address,
-                                     State = mem.State,
-                                     City = mem.City,
-                                     PinCode = mem.PinCode,
-                                     Nominee = mem.Nominee,
-                                     RelationWithNominee = mem.RelationWithNominee,
-                                     IsActive = mem.IsActive,
                                      CreationDate = mem.CreationDate
                                  }).ToListAsync();
             return members;
         }
         public async Task<TotalCount> TotalCount()
-        {           
+        {
             var result = new TotalCount()
             {
                 Today = await _dbContext.Members.CountAsync(x => x.CreationDate.Value.Date == DateTime.UtcNow.Date),
@@ -213,18 +189,31 @@ namespace MadhurAPI.Services.Repository
         }
         //Store Procedure Recursive Data
         public async Task<IEnumerable<LevelCount>> LevelCount(string MemberId)
-        {        
-            var data =await _dbContext.LevelCount.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},LevelTotalCount").ToListAsync();
+        {
+            var data = await _dbContext.LevelCount.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},LevelTotalCount").ToListAsync();
+            return data;
+        }
+        //public async Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId)
+        //{
+        //    var data = await (from mem in _dbContext.Members
+        //                      where mem.RefId == MemberId
+        //                      select new AllSelfMemberDTO
+        //                      {
+        //                          MemberId = mem.MemberId,
+        //                          MemberName = mem.MemberName,
+        //                          MobileNo = mem.MobileNo,
+        //                          City = mem.City
+        //                      }).ToListAsync();
+        //    return data;
+        //}
+        public async Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId)
+        {
+            var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},AllMember").ToListAsync();
             return data;
         }
         public async Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId)
         {
             var data = await _dbContext.AllSelfMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},AllSelfMember").ToListAsync();
-            return data;
-        }
-        public async Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId)
-        {
-            var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},AllMember").ToListAsync();
             return data;
         }
         public async Task<IEnumerable<AllMemberDTO>> TodayMember(string MemberId)

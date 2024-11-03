@@ -51,12 +51,12 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpGet("GetMembers")]
-        public async Task<IActionResult> GetMembers()
+        [HttpPost("GetMembers")]
+        public async Task<IActionResult> GetMembers([FromBody]FilterDTO obj)
         {
             try
             {
-                var result = await _repository.GetMembers();
+                var result = await _repository.GetMembers(obj);
                 if (result == null)
                 {
                     return NotFound();
@@ -74,6 +74,12 @@ namespace MadhurAPI.Controllers
             var result = await _repository.LevelCount(MemberId);
             return Ok(result);
         }
+        [HttpGet("AllMember")]
+        public async Task<IActionResult> AllMember(string MemberId)
+        {
+            var result = await _repository.AllMember(MemberId);
+            return Ok(result);
+        }
         [HttpGet("AllSelfMember")]
         public async Task<IActionResult> AllSelfMember(string MemberId)
         {
@@ -85,13 +91,7 @@ namespace MadhurAPI.Controllers
         {
             var result = await _repository.TodayMember(MemberId);
             return Ok(result);
-        }
-        [HttpGet("AllMember")]
-        public async Task<IActionResult> AllMember(string MemberId)
-        {
-            var result = await _repository.AllMember(MemberId);
-            return Ok(result);
-        }
+        }        
         [HttpGet("GetTodayMembers")]
         public async Task<IActionResult> GetTodayMembers()
         {

@@ -5,7 +5,7 @@ namespace MadhurAPI.Services.Interface
 {
     public interface IMemberRepository
     {
-        Task<IEnumerable<MemberDTO>> GetMembers();
+        Task<IEnumerable<MemberDTO>> GetMembers(FilterDTO obj);
         Task<IEnumerable<RegKey>> RegKeys();
         Task<TotalCount> TotalCount();
         Task<Member> GetMember(string memberId);
@@ -16,8 +16,8 @@ namespace MadhurAPI.Services.Interface
         Task<Member> UpdateMember(Member member);
         Task<bool> UpdateRegKeys(int[] AutoId);
         Task<string> UpdateStatus(string memberId);
-        Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId);
         Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId);
+        Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId);
         Task<IEnumerable<AllMemberDTO>> TodayMember(string MemberId);
         Task<IEnumerable<LevelCount>> LevelCount(string MemberId);
         Task<Response> GenerateKey();       
