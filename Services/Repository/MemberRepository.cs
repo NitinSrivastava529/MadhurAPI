@@ -7,46 +7,32 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.Linq;
+using AutoMapper;
 
 namespace MadhurAPI.Services.Repository
 {
     public class MemberRepository : IMemberRepository
     {
         private AppDbContext _dbContext;
-        public MemberRepository(AppDbContext dbContext)
+        private readonly IMapper _mapper;
+        public MemberRepository(AppDbContext dbContext,IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
         public async Task<IEnumerable<MemberDTO>> GetMembers(FilterDTO obj)
-        {
+        {   
             var members = await (from mem in _dbContext.Members
                                  where (!string.IsNullOrEmpty(obj.Mobile) ? mem.MobileNo.Contains(obj.Mobile) : mem.MobileNo != null)
-                                 orderby mem.RefId
-                                 select new MemberDTO
-                                 {
-                                     RegPin = mem.RegPin,
-                                     RefName = mem.RefId,
-                                     MemberId = mem.MemberId,
-                                     MemberName = mem.MemberName,
-                                     MobileNo = mem.MobileNo,
-                                     CreationDate = mem.CreationDate
-                                 }).AsNoTracking().Skip((obj.PageNo - 1) * obj.PageSize).Take(obj.PageSize).ToListAsync();
-            return members;
+                                 orderby mem.RefId select mem).AsNoTracking().Skip((obj.PageNo - 1) * obj.PageSize).Take(obj.PageSize).ToListAsync();
+            return _mapper.Map<IEnumerable<MemberDTO>>(members);
         }
         public async Task<IEnumerable<MemberDTO>> GetTodayMembers()
         {
             var members = await (from mem in _dbContext.Members                               
                                  where mem.CreationDate.Value.Date == DateTime.UtcNow.Date
-                                 select new MemberDTO
-                                 {
-                                     RegPin = mem.RegPin,
-                                     RefId = mem.RefId,
-                                     MemberId = mem.MemberId,
-                                     MemberName = mem.MemberName,
-                                     MobileNo = mem.MobileNo,
-                                     CreationDate = mem.CreationDate
-                                 }).ToListAsync();
-            return members;
+                                 select mem).ToListAsync();
+            return _mapper.Map<IEnumerable<MemberDTO>>(members);
         }
         public async Task<TotalCount> TotalCount()
         {
@@ -192,20 +178,7 @@ namespace MadhurAPI.Services.Repository
         {
             var data = await _dbContext.LevelCount.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},LevelTotalCount").ToListAsync();
             return data;
-        }
-        //public async Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId)
-        //{
-        //    var data = await (from mem in _dbContext.Members
-        //                      where mem.RefId == MemberId
-        //                      select new AllSelfMemberDTO
-        //                      {
-        //                          MemberId = mem.MemberId,
-        //                          MemberName = mem.MemberName,
-        //                          MobileNo = mem.MobileNo,
-        //                          City = mem.City
-        //                      }).ToListAsync();
-        //    return data;
-        //}
+        }    
         public async Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId)
         {
             var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},AllMember").ToListAsync();

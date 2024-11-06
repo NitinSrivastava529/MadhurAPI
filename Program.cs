@@ -1,4 +1,5 @@
 using MadhurAPI.Data;
+using MadhurAPI.Helper;
 using MadhurAPI.Services.Interface;
 using MadhurAPI.Services.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 builder.Services.AddControllers();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 builder.Services.AddScoped<IAuthenticationRepository,AuthenticationRepository>();
+builder.Services.AddAutoMapper(typeof(ApplicationMapper));
 builder.Services.AddCors(option => option.AddPolicy("MadhurCorsPolicy", policy =>
 {
     policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
