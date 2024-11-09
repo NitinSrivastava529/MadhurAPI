@@ -36,9 +36,6 @@ namespace MadhurAPI.Migrations
                     b.Property<string>("RefId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ReferralName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("city")
                         .HasColumnType("nvarchar(max)");
 
@@ -47,6 +44,9 @@ namespace MadhurAPI.Migrations
 
             modelBuilder.Entity("MadhurAPI.Models.DTO.AllSelfMemberDTO", b =>
                 {
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MemberId")
                         .HasColumnType("nvarchar(max)");
 
@@ -54,9 +54,6 @@ namespace MadhurAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MobileNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("city")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("total")
@@ -74,6 +71,20 @@ namespace MadhurAPI.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("LevelCount");
+                });
+
+            modelBuilder.Entity("MadhurAPI.Models.DTO.LevelWiseMemberDTO", b =>
+                {
+                    b.Property<string>("MemberId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MemberName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("levelCount")
+                        .HasColumnType("int");
+
+                    b.ToTable("LevelWiseMember");
                 });
 
             modelBuilder.Entity("MadhurAPI.Models.DistrictMaster", b =>

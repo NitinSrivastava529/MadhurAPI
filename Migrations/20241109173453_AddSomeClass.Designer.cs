@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MadhurAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241030132100_today")]
-    partial class today
+    [Migration("20241109173453_AddSomeClass")]
+    partial class AddSomeClass
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,9 +39,6 @@ namespace MadhurAPI.Migrations
                     b.Property<string>("RefId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ReferralName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("city")
                         .HasColumnType("nvarchar(max)");
 
@@ -50,6 +47,9 @@ namespace MadhurAPI.Migrations
 
             modelBuilder.Entity("MadhurAPI.Models.DTO.AllSelfMemberDTO", b =>
                 {
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MemberId")
                         .HasColumnType("nvarchar(max)");
 
@@ -57,9 +57,6 @@ namespace MadhurAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MobileNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("city")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("total")
@@ -77,6 +74,20 @@ namespace MadhurAPI.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("LevelCount");
+                });
+
+            modelBuilder.Entity("MadhurAPI.Models.DTO.LevelWiseMemberDTO", b =>
+                {
+                    b.Property<string>("MemberId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MemberName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("levelCount")
+                        .HasColumnType("int");
+
+                    b.ToTable("LevelWiseMember");
                 });
 
             modelBuilder.Entity("MadhurAPI.Models.DistrictMaster", b =>

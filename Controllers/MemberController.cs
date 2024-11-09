@@ -74,10 +74,17 @@ namespace MadhurAPI.Controllers
             var result = await _repository.LevelCount(MemberId);
             return Ok(result);
         }
+
         [HttpGet("AllMember")]
         public async Task<IActionResult> AllMember(string MemberId)
         {
             var result = await _repository.AllMember(MemberId);
+            return Ok(result);
+        }
+        [HttpGet("LevelWiseMember")]
+        public async Task<IActionResult> LevelWiseMember()
+        {
+            var result = await _repository.LevelWiseMember();
             return Ok(result);
         }
         [HttpGet("AllSelfMember")]

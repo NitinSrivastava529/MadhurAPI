@@ -194,5 +194,10 @@ namespace MadhurAPI.Services.Repository
             var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},TodayMember").ToListAsync();
             return data;
         }
+        public async Task<IEnumerable<LevelWiseMemberDTO>> LevelWiseMember()
+        {
+            var data = await _dbContext.LevelWiseMember.FromSqlInterpolated($"exec pRecursiveQueries {"-"},LevelWiseReport").ToListAsync();
+            return data;
+        }
     }
 }

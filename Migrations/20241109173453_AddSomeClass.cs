@@ -5,7 +5,7 @@
 namespace MadhurAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class today : Migration
+    public partial class AddSomeClass : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
