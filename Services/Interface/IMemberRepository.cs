@@ -20,7 +20,8 @@ namespace MadhurAPI.Services.Interface
         Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId);
         Task<IEnumerable<AllMemberDTO>> TodayMember(string MemberId);
         Task<IEnumerable<LevelCount>> LevelCount(string MemberId);
-        Task<IEnumerable<LevelWiseMemberDTO>> LevelWiseMember();
+        Task<IEnumerable<LevelReportDTO>> LevelReport();
+        Task<IEnumerable<LevelWiseMemberDTO>> LevelWiseMember(string Prm1);
         Task<Response> GenerateKey();       
  
     }

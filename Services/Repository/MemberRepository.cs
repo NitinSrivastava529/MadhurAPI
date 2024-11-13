@@ -24,6 +24,7 @@ namespace MadhurAPI.Services.Repository
         {   
             var members = await (from mem in _dbContext.Members
                                  where (!string.IsNullOrEmpty(obj.Mobile) ? mem.MobileNo.Contains(obj.Mobile) : mem.MobileNo != null)
+                                 || (!string.IsNullOrEmpty(obj.Mobile) ? mem.MemberId.Contains(obj.Mobile) : mem.MemberId != null)
                                  orderby mem.RefId select mem).AsNoTracking().Skip((obj.PageNo - 1) * obj.PageSize).Take(obj.PageSize).ToListAsync();
             return _mapper.Map<IEnumerable<MemberDTO>>(members);
         }
@@ -176,27 +177,32 @@ namespace MadhurAPI.Services.Repository
         //Store Procedure Recursive Data
         public async Task<IEnumerable<LevelCount>> LevelCount(string MemberId)
         {
-            var data = await _dbContext.LevelCount.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},LevelTotalCount").ToListAsync();
+            var data = await _dbContext.LevelCount.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},LevelTotalCount").ToListAsync();
             return data;
         }    
         public async Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId)
         {
-            var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},AllMember").ToListAsync();
+            var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},AllMember").ToListAsync();
             return data;
         }
         public async Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId)
         {
-            var data = await _dbContext.AllSelfMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},AllSelfMember").ToListAsync();
+            var data = await _dbContext.AllSelfMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},AllSelfMember").ToListAsync();
             return data;
         }
         public async Task<IEnumerable<AllMemberDTO>> TodayMember(string MemberId)
         {
-            var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},TodayMember").ToListAsync();
+            var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},TodayMember").ToListAsync();
             return data;
         }
-        public async Task<IEnumerable<LevelWiseMemberDTO>> LevelWiseMember()
+        public async Task<IEnumerable<LevelReportDTO>> LevelReport()
         {
-            var data = await _dbContext.LevelWiseMember.FromSqlInterpolated($"exec pRecursiveQueries {"-"},LevelWiseReport").ToListAsync();
+            var data = await _dbContext.LevelReport.FromSqlInterpolated($"exec pRecursiveQueries {"-"},{"-"},LevelReport").ToListAsync();
+            return data;
+        }
+        public async Task<IEnumerable<LevelWiseMemberDTO>> LevelWiseMember(string Prm1)
+        {
+            var data = await _dbContext.LevelWiseMember.FromSqlInterpolated($"exec pRecursiveQueries {"-"},{Prm1},LevelWiseReport").ToListAsync();
             return data;
         }
     }

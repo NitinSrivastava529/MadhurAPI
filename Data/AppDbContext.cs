@@ -18,15 +18,17 @@ namespace MadhurAPI.Data
         public DbSet<AllSelfMemberDTO> AllSelfMember { get; set; }
         public DbSet<LevelCount> LevelCount { get; set; }
         public DbSet<LevelWiseMemberDTO> LevelWiseMember { get; set; }
+        public DbSet<LevelReportDTO> LevelReport { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {       
             modelBuilder.Entity<AllMemberDTO>().HasNoKey();
-          
+            
             modelBuilder.Entity<AllSelfMemberDTO>().HasNoKey();
                    
             modelBuilder.Entity<LevelCount>().HasNoKey();
            
             modelBuilder.Entity<LevelWiseMemberDTO>().HasNoKey();
+            modelBuilder.Entity<LevelReportDTO>().HasNoKey();
             base.OnModelCreating(modelBuilder);
         }
     }
