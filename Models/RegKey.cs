@@ -12,7 +12,7 @@ namespace MadhurAPI.Models
         public int AuotId { get; set; }
         [Column(TypeName = "nvarchar(10)")]
         public string Key { get; set; }
-        public char IsCopy { get; set; }= 'N';
+        public char IsCopy { get; set; } = 'N';
         public DateTime CreationDate { get; set; }
     }
 }

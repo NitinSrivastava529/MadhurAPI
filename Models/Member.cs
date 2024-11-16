@@ -7,16 +7,16 @@ namespace MadhurAPI.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column(TypeName ="bigint",Order =0)]
+        [Column(TypeName = "bigint", Order = 0)]
         public int AutoId { get; set; }
 
-        [Column(TypeName ="varchar(10)",Order =1)]
+        [Column(TypeName = "varchar(10)", Order = 1)]
         public string? RegPin { get; set; }
 
-        [Column(TypeName = "varchar(10)",Order =2)]
+        [Column(TypeName = "varchar(10)", Order = 2)]
         public string? RefId { get; set; }
 
-        [Column(TypeName = "varchar(10)",Order =3)]
+        [Column(TypeName = "varchar(10)", Order = 3)]
         public string? MemberId { get; set; }
 
         [Column(TypeName = "varchar(50)")]
@@ -53,7 +53,7 @@ namespace MadhurAPI.Models
         public string? RelationWithNominee { get; set; }
 
         [Column(TypeName = "char(1)")]
-        public char? IsActive { get; set; }='Y';
+        public char? IsActive { get; set; } = 'Y';
 
         [Column(TypeName = "datetime")]
         public DateTime? CreationDate { get; set; } = DateTime.UtcNow;

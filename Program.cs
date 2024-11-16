@@ -3,6 +3,7 @@ using MadhurAPI.Helper;
 using MadhurAPI.Services.Interface;
 using MadhurAPI.Services.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,9 +33,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors("MadhurCorsPolicy");
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resource\Reward")),
+    RequestPath = new PathString("/Resource/Reward")
+});
 app.Run();

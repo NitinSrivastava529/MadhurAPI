@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace MadhurAPI.Services.Repository
 {
@@ -15,22 +16,23 @@ namespace MadhurAPI.Services.Repository
     {
         private AppDbContext _dbContext;
         private readonly IMapper _mapper;
-        public MemberRepository(AppDbContext dbContext,IMapper mapper)
+        public MemberRepository(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
         }
         public async Task<IEnumerable<MemberDTO>> GetMembers(FilterDTO obj)
-        {   
+        {
             var members = await (from mem in _dbContext.Members
                                  where (!string.IsNullOrEmpty(obj.Mobile) ? mem.MobileNo.Contains(obj.Mobile) : mem.MobileNo != null)
                                  || (!string.IsNullOrEmpty(obj.Mobile) ? mem.MemberId.Contains(obj.Mobile) : mem.MemberId != null)
-                                 orderby mem.RefId select mem).AsNoTracking().Skip((obj.PageNo - 1) * obj.PageSize).Take(obj.PageSize).ToListAsync();
+                                 orderby mem.RefId
+                                 select mem).AsNoTracking().Skip((obj.PageNo - 1) * obj.PageSize).Take(obj.PageSize).ToListAsync();
             return _mapper.Map<IEnumerable<MemberDTO>>(members);
         }
         public async Task<IEnumerable<MemberDTO>> GetTodayMembers()
         {
-            var members = await (from mem in _dbContext.Members                               
+            var members = await (from mem in _dbContext.Members
                                  where mem.CreationDate.Value.Date == DateTime.UtcNow.Date
                                  select mem).ToListAsync();
             return _mapper.Map<IEnumerable<MemberDTO>>(members);
@@ -179,7 +181,7 @@ namespace MadhurAPI.Services.Repository
         {
             var data = await _dbContext.LevelCount.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},LevelTotalCount").ToListAsync();
             return data;
-        }    
+        }
         public async Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId)
         {
             var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},AllMember").ToListAsync();
@@ -203,6 +205,39 @@ namespace MadhurAPI.Services.Repository
         public async Task<IEnumerable<LevelWiseMemberDTO>> LevelWiseMember(string Prm1)
         {
             var data = await _dbContext.LevelWiseMember.FromSqlInterpolated($"exec pRecursiveQueries {"-"},{Prm1},LevelWiseReport").ToListAsync();
+            return data;
+        }
+        //Reward Master Operation
+        public async Task<Response> AddReward(RewardMasterDTO dto)
+        {
+            var response = new Response();
+            var folderName = Path.Combine("Resource", "Reward");
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            if (!Directory.Exists(pathToSave))
+            {
+                Directory.CreateDirectory(pathToSave);
+            }
+            var fileName =dto.MemberId+"_"+dto.level+"_"+dto.file_path.FileName;
+            var fullPath = Path.Combine(pathToSave, fileName);
+
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                dto.file_path.CopyTo(stream);
+            }
+
+            var data = _mapper.Map<RewardMaster>(dto);
+            var result = _dbContext.RewardMaster.AddAsync(data);
+            await _dbContext.SaveChangesAsync();
+            if (result.IsCompletedSuccessfully)
+            {
+                response.message = "Successfully Saved.";
+                response.result = true;
+            }
+            return response;
+        }
+        public async Task<IEnumerable<RewardMaster>> GetReward(string MemberId)
+        {
+            var data = await _dbContext.RewardMaster.Where(x =>(MemberId!="ALL")? x.MemberId == MemberId:x.MemberId !=null).ToListAsync();            
             return data;
         }
     }

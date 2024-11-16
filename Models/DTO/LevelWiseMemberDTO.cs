@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MadhurAPI.Models.DTO
 {
-    [NotMapped]
     [Keyless]
     public class LevelWiseMemberDTO
     {
@@ -11,6 +10,6 @@ namespace MadhurAPI.Models.DTO
         public string? MemberName { get; set; }
         public string? MobileNo { get; set; }
         public string? City { get; set; }
-        public int? levelCount { get; set; }
+        public string? Reward { get; set; }
     }
 }

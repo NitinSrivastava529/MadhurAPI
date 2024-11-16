@@ -235,5 +235,22 @@ namespace MadhurAPI.Controllers
             await _repository.UpdateRegKeys(AutotId);
             return Ok();
         }
+        [HttpPost("AddReward")]
+        public async Task<IActionResult> AddReward([FromForm] RewardMasterDTO obj)
+        {
+            if(obj.file_path==null && obj.file_path.Length == 0)
+            {
+                return BadRequest("Invalid File !");
+            }
+            var result= await _repository.AddReward(obj);
+            return Ok(result);
+        }
+
+        [HttpGet("GetReward")]
+        public async Task<IActionResult> GetReward(string MemberId)
+        {
+            var result = await _repository.GetReward(MemberId);
+            return Ok(result);
+        }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MadhurAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241109173453_AddSomeClass")]
-    partial class AddSomeClass
+    [Migration("20241113144608_init2")]
+    partial class init2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,18 +76,55 @@ namespace MadhurAPI.Migrations
                     b.ToTable("LevelCount");
                 });
 
+            modelBuilder.Entity("MadhurAPI.Models.DTO.LevelReportDTO", b =>
+                {
+                    b.Property<int>("level")
+                        .HasColumnType("int");
+
+                    b.Property<int>("totalCount")
+                        .HasColumnType("int");
+
+                    b.ToTable("LevelReport");
+                });
+
             modelBuilder.Entity("MadhurAPI.Models.DTO.LevelWiseMemberDTO", b =>
                 {
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MemberId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MemberName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MobileNo")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("levelCount")
                         .HasColumnType("int");
 
                     b.ToTable("LevelWiseMember");
+                });
+
+            modelBuilder.Entity("MadhurAPI.Models.DTO.RewardMasterDTO", b =>
+                {
+                    b.Property<int>("AutoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MemberId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("level")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("RewardMasterDTO");
                 });
 
             modelBuilder.Entity("MadhurAPI.Models.DistrictMaster", b =>
@@ -200,6 +237,34 @@ namespace MadhurAPI.Migrations
                     b.HasKey("AuotId");
 
                     b.ToTable("RegKeys");
+                });
+
+            modelBuilder.Entity("MadhurAPI.Models.RewardMaster", b =>
+                {
+                    b.Property<long>("AutoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("AutoId"));
+
+                    b.Property<DateTime?>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MemberId")
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("file_path")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("level")
+                        .HasColumnType("varchar(5)");
+
+                    b.HasKey("AutoId");
+
+                    b.ToTable("RewardMaster");
                 });
 
             modelBuilder.Entity("MadhurAPI.Models.StateMaster", b =>
