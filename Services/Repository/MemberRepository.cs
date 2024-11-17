@@ -70,6 +70,11 @@ namespace MadhurAPI.Services.Repository
             var member = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);
             return member;
         }
+        public async Task<IEnumerable<Member>> GetRepurchase(string memberId)
+        {
+            var member = await _dbContext.Members.Where(x => x.RefId == memberId && x.MemberType=="Repurchase").ToListAsync();
+            return member;
+        }
         public async Task<RegistrationDTO> AddMember(Member member)
         {
             var response = new RegistrationDTO();
@@ -91,11 +96,11 @@ namespace MadhurAPI.Services.Repository
                 return response;
             }
 
-            if (_dbContext.Members.Count(x => x.AadharNo == member.AadharNo) > 0)
-            {
-                response.Message = "AadharNo No Already Exists";
-                return response;
-            }
+            //if (_dbContext.Members.Count(x => x.AadharNo == member.AadharNo) > 0)
+            //{
+            //    response.Message = "AadharNo No Already Exists";
+            //    return response;
+            //}
 
             member.MemberId = "MEM" + $"{(_dbContext.Members.Count() + 1):D7}";
 

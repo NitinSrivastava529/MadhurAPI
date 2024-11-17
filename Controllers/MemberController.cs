@@ -104,7 +104,13 @@ namespace MadhurAPI.Controllers
         {
             var result = await _repository.TodayMember(MemberId);
             return Ok(result);
-        }        
+        }
+        [HttpGet("GetRepurchase")]
+        public async Task<IActionResult> GetRepurchase(string MemberId)
+        {
+            var result = await _repository.GetRepurchase(MemberId);
+            return Ok(result);
+        }
         [HttpGet("GetTodayMembers")]
         public async Task<IActionResult> GetTodayMembers()
         {
