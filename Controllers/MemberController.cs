@@ -203,6 +203,12 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
+        [HttpPost("Repurchase")]
+        public async Task<IActionResult> Repurchase( string memberId,string RegKey)
+        {
+            Response result = await _repository.Repurchase(memberId, RegKey);
+            return Ok(result);
+        }
         [HttpPut("UpdateMember")]
         public async Task<IActionResult> UpdateMember([FromBody] Member member)
         {

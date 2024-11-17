@@ -16,7 +16,7 @@ namespace MadhurAPI.Models
         [Column(TypeName = "varchar(10)", Order = 2)]
         public string? RefId { get; set; }
 
-        [Column(TypeName = "varchar(10)", Order = 3)]
+        [Column(TypeName = "varchar(20)", Order = 3)]
         public string? MemberId { get; set; }
 
         [Column(TypeName = "varchar(50)")]
@@ -54,6 +54,8 @@ namespace MadhurAPI.Models
 
         [Column(TypeName = "char(1)")]
         public char? IsActive { get; set; } = 'Y';
+        [Column(TypeName = "varchar(20)")]
+        public string? MemberType { get; set; } = "Member";
 
         [Column(TypeName = "datetime")]
         public DateTime? CreationDate { get; set; } = DateTime.UtcNow;

@@ -9,6 +9,8 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using AutoMapper.Execution;
+using Member = MadhurAPI.Models.Member;
 
 namespace MadhurAPI.Services.Repository
 {
@@ -110,6 +112,49 @@ namespace MadhurAPI.Services.Repository
             response.MemberId = member.MemberId;
             response.Password = member.Password;
             response.Message = "Successfully Registered.\n Login Id : " + member.MemberId + " \n Password : " + member.Password;
+            return response;
+        }
+        public async Task<Response> Repurchase(string MemberId, string RegKey)
+        {
+            var response = new Response();
+            if (_dbContext.RegKeys.Count(x => x.Key == RegKey) == 0)
+            {
+                response.message = "Registration Pin Not Valid";
+                response.result = false;
+                return response;
+            }
+
+            if (_dbContext.Members.Count(x => x.RegPin == RegKey) > 0)
+            {
+                response.message = "This Registration Pin Already Used";
+                response.result = false;
+                return response;
+            }
+
+            var data = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == MemberId);
+            if (data != null)
+            {
+                var count = (_dbContext.Members.Count(x => x.RefId == MemberId && x.MemberType == "Repurchase") + 1);
+                data.AutoId = 0;
+                data.RegPin = RegKey;
+                data.RefId = MemberId;
+                data.MemberId = data.MemberId + "-R" + count;
+                data.MemberName = "Repurchase-" + count;
+                data.MemberType = "Repurchase";
+                data.CreationDate = DateTime.UtcNow;
+            }
+            var result = _dbContext.Members.AddAsync(data);
+            await _dbContext.SaveChangesAsync();
+            if (result.IsCompleted)
+            {
+                var dataKey = await _dbContext.RegKeys.FirstOrDefaultAsync(x => x.Key == RegKey);
+                if (dataKey != null)
+                    _dbContext.RegKeys.Remove(dataKey);
+
+                await _dbContext.SaveChangesAsync();
+            }
+            response.message = "Successfully Repurchased";
+            response.result = true;
             return response;
         }
         public async Task<string> UpdateStatus(string memberId)
@@ -217,7 +262,7 @@ namespace MadhurAPI.Services.Repository
             {
                 Directory.CreateDirectory(pathToSave);
             }
-            var fileName =dto.MemberId+"_"+dto.level+"_"+dto.file_path.FileName;
+            var fileName = dto.MemberId + "_" + dto.level + "_" + dto.file_path.FileName;
             var fullPath = Path.Combine(pathToSave, fileName);
 
             using (var stream = new FileStream(fullPath, FileMode.Create))
@@ -237,7 +282,7 @@ namespace MadhurAPI.Services.Repository
         }
         public async Task<IEnumerable<RewardMaster>> GetReward(string MemberId)
         {
-            var data = await _dbContext.RewardMaster.Where(x =>(MemberId!="ALL")? x.MemberId == MemberId:x.MemberId !=null).ToListAsync();            
+            var data = await _dbContext.RewardMaster.Where(x => (MemberId != "ALL") ? x.MemberId == MemberId : x.MemberId != null).ToListAsync();
             return data;
         }
     }
