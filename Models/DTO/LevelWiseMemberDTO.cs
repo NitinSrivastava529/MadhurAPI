@@ -9,7 +9,6 @@ namespace MadhurAPI.Models.DTO
         public string? MemberId { get; set; }
         public string? MemberName { get; set; }
         public string? MobileNo { get; set; }
-        public string? City { get; set; }
-        public string? Reward { get; set; }
+        public string? City { get; set; }        
     }
 }

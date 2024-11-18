@@ -32,7 +32,7 @@ namespace MadhurAPI.Controllers
                     new Claim(JwtRegisteredClaimNames.Sub,_configuration["Jwt:Subject"]),
                     new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
                     new Claim("MemberId",obj.MemberId.ToString()),
-                    new Claim("Password",obj.Password.ToString())
+                    new Claim("CreationDate",DateTime.UtcNow.ToString())
                 };
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
                 var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -46,7 +46,7 @@ namespace MadhurAPI.Controllers
                 string tokenValue = new JwtSecurityTokenHandler().WriteToken(tokens);
                 return Ok(new { Token = tokenValue, response });
             }
-            return NoContent();
+            return Ok(new { Token = "", response });
         }
         [HttpPost("ChangePassword")]
         public async Task<Response> ChangePassword([FromBody] ChangePasswordDTO obj)
