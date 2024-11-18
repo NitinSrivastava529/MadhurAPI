@@ -1,11 +1,13 @@
 ﻿using MadhurAPI.Models;
 using MadhurAPI.Models.DTO;
 using MadhurAPI.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MadhurAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MemberController : ControllerBase
@@ -196,19 +198,7 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpPost("AddMember")]
-        public async Task<IActionResult> AddMember([FromBody] Member member)
-        {
-            try
-            {
-                RegistrationDTO result = await _repository.AddMember(member);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
+ 
         [HttpPost("Repurchase")]
         public async Task<IActionResult> Repurchase( string memberId,string RegKey)
         {

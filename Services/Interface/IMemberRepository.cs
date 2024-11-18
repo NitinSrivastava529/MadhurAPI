@@ -12,8 +12,7 @@ namespace MadhurAPI.Services.Interface
         Task<IEnumerable<Member>> GetRepurchase(string memberId);
         Task<IEnumerable<StateMaster>> GetState();
         Task<IEnumerable<MemberDTO>> GetTodayMembers();
-        Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code);
-        Task<RegistrationDTO> AddMember(Member member);
+        Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code);      
         Task<Response> Repurchase(string MemberId, string RegKey);
         Task<Member> UpdateMember(Member member);
         Task<bool> UpdateRegKeys(int[] AutoId);

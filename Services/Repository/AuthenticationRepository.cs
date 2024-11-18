@@ -1,5 +1,6 @@
 ﻿using Azure;
 using MadhurAPI.Data;
+using MadhurAPI.Models;
 using MadhurAPI.Models.DTO;
 using MadhurAPI.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,50 @@ namespace MadhurAPI.Services.Repository
                 response.message = "Login Successful.";
                 response.result = true;
             }
+            return response;
+        }
+        public async Task<RegistrationDTO> AddMember(Member member)
+        {
+            var response = new RegistrationDTO();
+            if (_dbContext.RegKeys.Count(x => x.Key == member.RegPin) == 0)
+            {
+                response.Message = "Registration Pin Not Valid";
+                return response;
+            }
+
+            if (_dbContext.Members.Count(x => x.RegPin == member.RegPin) > 0)
+            {
+                response.Message = "This Registration Pin Already Used";
+                return response;
+            }
+
+            if (_dbContext.Members.Count(x => x.MobileNo == member.MobileNo) > 0)
+            {
+                response.Message = "Mobile No Already Exists";
+                return response;
+            }
+
+            //if (_dbContext.Members.Count(x => x.AadharNo == member.AadharNo) > 0)
+            //{
+            //    response.Message = "AadharNo No Already Exists";
+            //    return response;
+            //}
+
+            member.MemberId = "MEM" + $"{(_dbContext.Members.Count() + 1):D7}";
+
+            var result = _dbContext.Members.AddAsync(member);
+            await _dbContext.SaveChangesAsync();
+            if (result.IsCompleted)
+            {
+                var dataKey = await _dbContext.RegKeys.FirstOrDefaultAsync(x => x.Key == member.RegPin);
+                if (dataKey != null)
+                    _dbContext.RegKeys.Remove(dataKey);
+
+                await _dbContext.SaveChangesAsync();
+            }
+            response.MemberId = member.MemberId;
+            response.Password = member.Password;
+            response.Message = "Successfully Registered.\n Login Id : " + member.MemberId + " \n Password : " + member.Password;
             return response;
         }
         public async Task<ForgetPasswordDTO> ForgetPassword(string MobileNo, string dob)
