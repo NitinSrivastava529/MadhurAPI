@@ -10,6 +10,7 @@ namespace MadhurAPI.Services.Interface
         Task<TotalCount> TotalCount();
         Task<Member> GetMember(string memberId);
         Task<IEnumerable<Member>> GetRepurchase(string memberId);
+        Task<TotalRepurchaseDTO> TotalRepurchase();
         Task<IEnumerable<StateMaster>> GetState();
         Task<IEnumerable<MemberDTO>> GetTodayMembers();
         Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code);      

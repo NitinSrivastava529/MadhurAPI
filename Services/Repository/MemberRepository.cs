@@ -72,10 +72,29 @@ namespace MadhurAPI.Services.Repository
         }
         public async Task<IEnumerable<Member>> GetRepurchase(string memberId)
         {
-            var member = await _dbContext.Members.Where(x => x.RefId == memberId && x.MemberType=="Repurchase").ToListAsync();
+            var member = await _dbContext.Members.Where(x => x.RefId == memberId && x.MemberType == "Repurchase").ToListAsync();
             return member;
         }
-       
+        public async Task<TotalRepurchaseDTO> TotalRepurchase()
+        {
+            var total = await _dbContext.Members.CountAsync(x => x.MemberType == "Repurchase");
+            var today = await _dbContext.Members.CountAsync(x => x.MemberType == "Repurchase" && x.CreationDate.Value.Date == DateTime.UtcNow.Date);
+            var data = await _dbContext.Members.Where(x => x.MemberType == "Repurchase" && x.CreationDate.Value.Date == DateTime.UtcNow.Date)
+                .Select(x => new RepurchaseList()
+                {
+                    RefId = x.RefId,
+                    RepurchaseId = x.MemberId,
+                    RepurchaseName = x.MemberName
+                }).ToListAsync();
+            var result = new TotalRepurchaseDTO()
+            {
+                Total = total,
+                Today = today,
+                list = data
+            };
+            return result;
+        }
+
         public async Task<Response> Repurchase(string MemberId, string RegKey)
         {
             var response = new Response();
