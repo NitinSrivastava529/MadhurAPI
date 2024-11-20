@@ -26,7 +26,9 @@ namespace MadhurAPI.Services.Interface
         Task<IEnumerable<LevelWiseMemberDTO>> LevelWiseMember(string Prm1);
         Task<Response> AddReward(RewardMasterDTO dto);
         Task<IEnumerable<RewardMaster>> GetReward(string MemberId);
-        Task<Response> GenerateKey();       
- 
+        Task<Response> GenerateKey();
+        Task<IEnumerable<BannerMaster>> GetBanner();
+
+
     }
 }

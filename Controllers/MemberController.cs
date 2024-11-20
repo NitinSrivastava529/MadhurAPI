@@ -18,7 +18,11 @@ namespace MadhurAPI.Controllers
         {
             _repository = repository;
         }
-
+        [HttpGet("GetBanner")]
+        public async Task<IActionResult> GetBanner()
+        {
+            return Ok(await _repository.GetBanner());
+        }
         [HttpGet("GenerateKey")]
         public async Task<IActionResult> GenerateKey()
         {

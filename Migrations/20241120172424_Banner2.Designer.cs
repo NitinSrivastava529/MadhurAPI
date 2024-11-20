@@ -4,6 +4,7 @@ using MadhurAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MadhurAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120172424_Banner2")]
+    partial class Banner2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,18 +40,6 @@ namespace MadhurAPI.Migrations
                     b.HasKey("AutoId");
 
                     b.ToTable("BannerMaster");
-
-                    b.HasData(
-                        new
-                        {
-                            AutoId = 1L,
-                            Banner = "slider1.png"
-                        },
-                        new
-                        {
-                            AutoId = 2L,
-                            Banner = "slider2.png"
-                        });
                 });
 
             modelBuilder.Entity("MadhurAPI.Models.DTO.AllMemberDTO", b =>

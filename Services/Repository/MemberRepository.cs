@@ -11,6 +11,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using AutoMapper.Execution;
 using Member = MadhurAPI.Models.Member;
+using MadhurAPI.Migrations;
 
 namespace MadhurAPI.Services.Repository
 {
@@ -265,6 +266,10 @@ namespace MadhurAPI.Services.Repository
         {
             var data = await _dbContext.RewardMaster.Where(x => (MemberId != "ALL") ? x.MemberId == MemberId : x.MemberId != null).ToListAsync();
             return data;
+        }
+        public async Task<IEnumerable<BannerMaster>> GetBanner()
+        {
+            return await _dbContext.BannerMaster.ToListAsync();
         }
     }
 }
