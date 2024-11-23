@@ -58,7 +58,7 @@ namespace MadhurAPI.Controllers
             }
         }
         [HttpPost("GetMembers")]
-        public async Task<IActionResult> GetMembers([FromBody]FilterDTO obj)
+        public async Task<IActionResult> GetMembers([FromBody] FilterDTO obj)
         {
             try
             {
@@ -208,9 +208,9 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
- 
+
         [HttpPost("Repurchase")]
-        public async Task<IActionResult> Repurchase( string memberId,string RegKey)
+        public async Task<IActionResult> Repurchase(string memberId, string RegKey)
         {
             Response result = await _repository.Repurchase(memberId, RegKey);
             return Ok(result);
@@ -250,11 +250,11 @@ namespace MadhurAPI.Controllers
         [HttpPost("AddReward")]
         public async Task<IActionResult> AddReward([FromForm] RewardMasterDTO obj)
         {
-            if(obj.file_path==null && obj.file_path.Length == 0)
+            if (obj.file_path == null && obj.file_path.Length == 0)
             {
                 return BadRequest("Invalid File !");
             }
-            var result= await _repository.AddReward(obj);
+            var result = await _repository.AddReward(obj);
             return Ok(result);
         }
 
@@ -262,6 +262,25 @@ namespace MadhurAPI.Controllers
         public async Task<IActionResult> GetReward(string MemberId)
         {
             var result = await _repository.GetReward(MemberId);
+            return Ok(result);
+        }
+
+        [HttpPost("ApproveReward")]
+        public async Task<IActionResult> ApproveReward([FromBody] RewardDistributorDTO obj)
+        {
+            var result = await _repository.ApproveReward(obj);
+            return Ok(result);
+        }
+        [HttpGet("TotalDistributorReward")]
+        public async Task<IActionResult> TotalDistributorReward(string distributorId)
+        {
+            var result = await _repository.TotalDistributorReward(distributorId);
+            return Ok(result);
+        }
+        [HttpDelete("ResetDistributorReward")]
+        public async Task<IActionResult> ResetDistributorReward(string distributorId)
+        {
+            var result = await _repository.ResetDistributorReward(distributorId);
             return Ok(result);
         }
     }

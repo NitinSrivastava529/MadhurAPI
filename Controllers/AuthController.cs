@@ -68,7 +68,7 @@ namespace MadhurAPI.Controllers
         {
             ForgetPasswordDTO response = await _repository.ForgetPassword(MobileNo, dob);
             return response;
-        }
+        }      
         [HttpPost("AddMember")]
         public async Task<IActionResult> AddMember([FromBody] Member member)
         {

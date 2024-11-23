@@ -1,8 +1,10 @@
-﻿using Azure;
+﻿using AutoMapper;
+using Azure;
 using MadhurAPI.Data;
 using MadhurAPI.Models;
 using MadhurAPI.Models.DTO;
 using MadhurAPI.Services.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Response = MadhurAPI.Models.Response;
 
@@ -10,10 +12,11 @@ namespace MadhurAPI.Services.Repository
 {
     public class AuthenticationRepository : IAuthenticationRepository
     {
-        private readonly AppDbContext _dbContext;
-        public AuthenticationRepository(AppDbContext dbContext)
+        private readonly AppDbContext _dbContext; private readonly IMapper _mapper;
+        public AuthenticationRepository(AppDbContext dbContext,IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
         public async Task<Response> Login(LoginDTO obj)
         {

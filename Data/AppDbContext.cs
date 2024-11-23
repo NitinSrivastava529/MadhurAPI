@@ -16,6 +16,7 @@ namespace MadhurAPI.Data
         public DbSet<DistrictMaster> DistrictMaster { get; set; }
         public DbSet<RewardMaster> RewardMaster { get; set; }
         public DbSet<BannerMaster> BannerMaster { get; set; }
+        public DbSet<RewardDistributor> RewardDistributor { get; set; }
 
         //DTOs
         public DbSet<AllMemberDTO> AllMember { get; set; }

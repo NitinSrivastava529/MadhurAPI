@@ -271,5 +271,56 @@ namespace MadhurAPI.Services.Repository
         {
             return await _dbContext.BannerMaster.ToListAsync();
         }
+        public async Task<Response> ApproveReward(RewardDistributorDTO obj)
+        {
+            var response = new Response();
+            if (_dbContext.RewardMaster.Count(x => x.MemberId == obj.MemberId && x.level == obj.Level) == 0)
+            {
+                response.message = "This is Invalid Reward";
+                response.result = false;
+                return response;
+            }
+            if (_dbContext.RegKeys.Count(x => x.Key == obj.key) == 0)
+            {
+                response.message = "Registration Pin Not Valid";
+                response.result = false;
+                return response;
+            }
+
+            if (_dbContext.Members.Count(x => x.MemberId == obj.DistributorId) == 0)
+            {
+                response.message = "Invalid Distributor Id";
+                response.result = false;
+                return response;
+            }
+            var data = _mapper.Map<RewardDistributor>(obj);
+            var result = _dbContext.RewardDistributor.AddAsync(data);
+
+            if (result.IsCompletedSuccessfully)
+            {
+                var dataKey = _dbContext.RegKeys.Where(x => x.Key == obj.key).FirstOrDefault();
+                if (dataKey != null)
+                    _dbContext.RegKeys.Remove(dataKey);
+
+                var rewardInfo = _dbContext.RewardMaster.FirstOrDefault(x => x.MemberId == obj.MemberId && x.level == obj.Level);
+                rewardInfo.IsApproved = 'Y';
+
+                _dbContext.SaveChanges();
+            }
+            response.message = "Success";
+            response.result = true;
+            return response;
+        }
+        public async Task<int> TotalDistributorReward(string distributorId)
+        {
+            return await _dbContext.RewardDistributor.CountAsync(x => x.DistributorId == distributorId);
+        }
+        public async Task<string> ResetDistributorReward(string distributorId)
+        {
+            var data = await _dbContext.RewardDistributor.Where(x => x.DistributorId == distributorId).ToListAsync();
+             _dbContext.RewardDistributor.RemoveRange(data);
+            await _dbContext.SaveChangesAsync();
+            return "Success";
+        }
     }
 }

@@ -5,7 +5,6 @@ namespace MadhurAPI.Models
 {
     public class RewardMaster
     {
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column(TypeName = "bigint")]
@@ -16,7 +15,8 @@ namespace MadhurAPI.Models
         public string? level { get; set; }
         [Column(TypeName = "nvarchar(500)")]
         public string? Remark { get; set; }
-        public string? file_path { get; set; }        
+        public string? file_path { get; set; }
+        public char IsApproved { get; set; } = 'N';
         public DateTime? CreationDate { get; set; }= DateTime.UtcNow;
     }
 }
