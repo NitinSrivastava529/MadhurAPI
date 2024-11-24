@@ -280,12 +280,26 @@ namespace MadhurAPI.Services.Repository
                 response.result = false;
                 return response;
             }
-            if (_dbContext.RegKeys.Count(x => x.Key == obj.key) == 0)
+            if (obj.Level == "1")
             {
-                response.message = "Registration Pin Not Valid";
-                response.result = false;
-                return response;
+                if (_dbContext.RegKeys.Count(x => x.Key == obj.key) == 0)
+                {
+                    response.message = "Registration Pin Not Valid";
+                    response.result = false;
+                    return response;
+                }
             }
+            if (obj.Level == "2")
+            {
+                var keys = obj.key.Split("|");
+                if (_dbContext.RegKeys.Count(x => keys.Contains(x.Key)) != 2)
+                {
+                    response.message = "Registration Pin Not Valid";
+                    response.result = false;
+                    return response;
+                }
+            }
+
 
             if (_dbContext.Members.Count(x => x.MemberId == obj.DistributorId) == 0)
             {
@@ -298,9 +312,19 @@ namespace MadhurAPI.Services.Repository
 
             if (result.IsCompletedSuccessfully)
             {
-                var dataKey = _dbContext.RegKeys.Where(x => x.Key == obj.key).FirstOrDefault();
-                if (dataKey != null)
-                    _dbContext.RegKeys.Remove(dataKey);
+                if (obj.Level == "1")
+                {
+                    var dataKey = _dbContext.RegKeys.Where(x => x.Key == obj.key).FirstOrDefault();
+                    if (dataKey != null)
+                        _dbContext.RegKeys.Remove(dataKey);
+                }
+                if (obj.Level == "2")
+                {
+                    var keys = obj.key.Split("|");
+                    var dataKey = _dbContext.RegKeys.Where(x => keys.Contains(x.Key)).ToList();
+                    if (dataKey != null)
+                        _dbContext.RegKeys.RemoveRange(dataKey);
+                }
 
                 var rewardInfo = _dbContext.RewardMaster.FirstOrDefault(x => x.MemberId == obj.MemberId && x.level == obj.Level);
                 rewardInfo.IsApproved = 'Y';
@@ -311,14 +335,15 @@ namespace MadhurAPI.Services.Repository
             response.result = true;
             return response;
         }
-        public async Task<int> TotalDistributorReward(string distributorId)
+        public async Task<IEnumerable<RewardDistributorInfoDTO>> RewardDistributorInfo(string distributorId)
         {
-            return await _dbContext.RewardDistributor.CountAsync(x => x.DistributorId == distributorId);
+            var data = await _dbContext.RewardDistributor.Where(x => x.DistributorId == distributorId).ToListAsync();
+            return _mapper.Map<IEnumerable<RewardDistributorInfoDTO>>(data);
         }
         public async Task<string> ResetDistributorReward(string distributorId)
         {
             var data = await _dbContext.RewardDistributor.Where(x => x.DistributorId == distributorId).ToListAsync();
-             _dbContext.RewardDistributor.RemoveRange(data);
+            _dbContext.RewardDistributor.RemoveRange(data);
             await _dbContext.SaveChangesAsync();
             return "Success";
         }

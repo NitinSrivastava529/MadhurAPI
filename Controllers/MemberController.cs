@@ -271,10 +271,10 @@ namespace MadhurAPI.Controllers
             var result = await _repository.ApproveReward(obj);
             return Ok(result);
         }
-        [HttpGet("TotalDistributorReward")]
-        public async Task<IActionResult> TotalDistributorReward(string distributorId)
+        [HttpGet("RewardDistributorInfo")]
+        public async Task<IActionResult> RewardDistributorInfo(string distributorId)
         {
-            var result = await _repository.TotalDistributorReward(distributorId);
+            var result = await _repository.RewardDistributorInfo(distributorId);
             return Ok(result);
         }
         [HttpDelete("ResetDistributorReward")]

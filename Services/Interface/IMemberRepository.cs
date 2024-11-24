@@ -29,7 +29,7 @@ namespace MadhurAPI.Services.Interface
         Task<Response> GenerateKey();
         Task<IEnumerable<BannerMaster>> GetBanner();
         Task<Response> ApproveReward(RewardDistributorDTO obj);
-        Task<int> TotalDistributorReward(string distributorId);
+        Task<IEnumerable<RewardDistributorInfoDTO>> RewardDistributorInfo(string distributorId);
         Task<string> ResetDistributorReward(string distributorId);
     }
 }

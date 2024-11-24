@@ -13,6 +13,7 @@ namespace MadhurAPI.Helper
                 .ForMember(dest => dest.file_path, opt => opt.MapFrom(src => src.MemberId + "_" + src.level + "_" + src.file_path.FileName))
                 .ReverseMap();
             CreateMap<RewardDistributor, RewardDistributorDTO>().ReverseMap();
+            CreateMap<RewardDistributorInfoDTO,RewardDistributor>().ReverseMap();
         }
     }
 }
