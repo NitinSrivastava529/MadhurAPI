@@ -7,6 +7,8 @@ namespace MadhurAPI.Services.Interface
     {
         Task<Response> Login(LoginDTO obj);
         Task<RegistrationDTO> AddMember(Member member);
+        Task<IEnumerable<StateMaster>> GetState();
+        Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code);
         Task<Response> ChangePassword(ChangePasswordDTO obj);
         Task<ForgetPasswordDTO> ForgetPassword(string MobileNo, string dob);
     }

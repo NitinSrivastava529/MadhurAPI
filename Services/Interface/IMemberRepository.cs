@@ -7,19 +7,21 @@ namespace MadhurAPI.Services.Interface
     {
         Task<IEnumerable<MemberDTO>> GetMembers(FilterDTO obj);
         Task<IEnumerable<RegKey>> RegKeys();
+        Task<TotalKeyDTO> TotalKey();
         Task<TotalCount> TotalCount();
         Task<Member> GetMember(string memberId);
         Task<IEnumerable<Member>> GetRepurchase(string memberId);
         Task<TotalRepurchaseDTO> TotalRepurchase();
-        Task<IEnumerable<StateMaster>> GetState();
+    
         Task<IEnumerable<MemberDTO>> GetTodayMembers();
-        Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code);      
+           
         Task<Response> Repurchase(string MemberId, string RegKey);
         Task<Member> UpdateMember(Member member);
         Task<bool> UpdateRegKeys(int[] AutoId);
         Task<string> UpdateStatus(string memberId);
         Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId);
         Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId);
+        Task<IEnumerable<AllSelfMemberDTO>> AllSelfMemberAdmin(string MemberId);
         Task<IEnumerable<AllMemberDTO>> TodayMember(string MemberId);
         Task<IEnumerable<LevelCount>> LevelCount(string MemberId);
         Task<IEnumerable<LevelReportDTO>> LevelReport();

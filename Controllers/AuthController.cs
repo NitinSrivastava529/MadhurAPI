@@ -48,6 +48,40 @@ namespace MadhurAPI.Controllers
             }
             return Ok(new { Token = "", response });
         }
+        [HttpGet("GetState")]
+        public async Task<IActionResult> GetState()
+        {
+            try
+            {
+                var result = await _repository.GetState();
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+        [HttpGet("GetDistrict/{StateCode}")]
+        public async Task<IActionResult> GetDistrict(int StateCode)
+        {
+            try
+            {
+                var result = await _repository.GetDistrict(StateCode);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
         [HttpPost("ChangePassword")]
         public async Task<Response> ChangePassword([FromBody] ChangePasswordDTO obj)
         {

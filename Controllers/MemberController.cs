@@ -57,6 +57,12 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
+        [HttpGet("TotalKey")]
+        public async Task<IActionResult> TotalKey()
+        {
+            var data = await _repository.TotalKey();
+            return Ok(data);
+        }
         [HttpPost("GetMembers")]
         public async Task<IActionResult> GetMembers([FromBody] FilterDTO obj)
         {
@@ -105,6 +111,12 @@ namespace MadhurAPI.Controllers
             var result = await _repository.AllSelfMember(MemberId);
             return Ok(result);
         }
+        [HttpGet("AllSelfMemberAdmin")]
+        public async Task<IActionResult> AllSelfMemberAdmin(string MemberId)
+        {
+            var result = await _repository.AllSelfMemberAdmin(MemberId);
+            return Ok(result);
+        }
         [HttpGet("TodayMember")]
         public async Task<IActionResult> TodayMember(string MemberId)
         {
@@ -140,40 +152,7 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpGet("GetState")]
-        public async Task<IActionResult> GetState()
-        {
-            try
-            {
-                var result = await _repository.GetState();
-                if (result == null)
-                {
-                    return NotFound();
-                }
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
-        [HttpGet("GetDistrict/{StateCode}")]
-        public async Task<IActionResult> GetDistrict(int StateCode)
-        {
-            try
-            {
-                var result = await _repository.GetDistrict(StateCode);
-                if (result == null)
-                {
-                    return NotFound();
-                }
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
-        }
+       
         [HttpGet("RegKeys")]
         public async Task<IActionResult> RegKeys()
         {

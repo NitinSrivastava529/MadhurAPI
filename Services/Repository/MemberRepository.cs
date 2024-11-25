@@ -29,6 +29,9 @@ namespace MadhurAPI.Services.Repository
             var members = await (from mem in _dbContext.Members
                                  where (!string.IsNullOrEmpty(obj.Mobile) ? mem.MobileNo.Contains(obj.Mobile) : mem.MobileNo != null)
                                  || (!string.IsNullOrEmpty(obj.Mobile) ? mem.MemberId.Contains(obj.Mobile) : mem.MemberId != null)
+                                 || (!string.IsNullOrEmpty(obj.Mobile) ? mem.Address.ToLower().Contains(obj.Mobile.ToLower()) : mem.Address != null)
+                                 || (!string.IsNullOrEmpty(obj.Mobile) ? mem.State.ToLower().Contains(obj.Mobile.ToLower()) : mem.State != null)
+                                 || (!string.IsNullOrEmpty(obj.Mobile) ? mem.City.ToLower().Contains(obj.Mobile.ToLower()) : mem.City != null)
                                  orderby mem.RefId
                                  select mem).AsNoTracking().Skip((obj.PageNo - 1) * obj.PageSize).Take(obj.PageSize).ToListAsync();
             return _mapper.Map<IEnumerable<MemberDTO>>(members);
@@ -56,16 +59,7 @@ namespace MadhurAPI.Services.Repository
             var RegKeys = await _dbContext.RegKeys.OrderByDescending(x => x.AuotId).ToListAsync();
             return RegKeys;
         }
-        public async Task<IEnumerable<StateMaster>> GetState()
-        {
-            var state = await _dbContext.StateMaster.ToListAsync();
-            return state;
-        }
-        public async Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code)
-        {
-            var district = await _dbContext.DistrictMaster.Where(x => x.state_code == state_code).ToListAsync();
-            return district;
-        }
+
         public async Task<Member> GetMember(string memberId)
         {
             var member = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);
@@ -219,6 +213,11 @@ namespace MadhurAPI.Services.Repository
             var data = await _dbContext.AllSelfMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},AllSelfMember").ToListAsync();
             return data;
         }
+        public async Task<IEnumerable<AllSelfMemberDTO>> AllSelfMemberAdmin(string MemberId)
+        {
+            var data = await _dbContext.AllSelfMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},AllSelfMemberAdmin").ToListAsync();
+            return data;
+        }
         public async Task<IEnumerable<AllMemberDTO>> TodayMember(string MemberId)
         {
             var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},TodayMember").ToListAsync();
@@ -238,6 +237,13 @@ namespace MadhurAPI.Services.Repository
         public async Task<Response> AddReward(RewardMasterDTO dto)
         {
             var response = new Response();
+            if (_dbContext.RewardMaster.Count(x => x.MemberId == dto.MemberId && x.level == dto.level) >0)
+            {
+                response.message = "This Reward Already Exists";
+                response.result = false;
+                return response;
+            }
+          
             var folderName = Path.Combine("Resource", "Reward");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             if (!Directory.Exists(pathToSave))
@@ -346,6 +352,17 @@ namespace MadhurAPI.Services.Repository
             _dbContext.RewardDistributor.RemoveRange(data);
             await _dbContext.SaveChangesAsync();
             return "Success";
+        }
+        public async Task<TotalKeyDTO> TotalKey()
+        {
+            var res = new TotalKeyDTO()
+            {
+                member = await _dbContext.Members.CountAsync(x => x.MemberType == "Member"),
+                purchase = await _dbContext.Members.CountAsync(x => x.MemberType == "Repurchase"),
+                reward = await _dbContext.RewardDistributor.CountAsync(),
+                total = 0
+            };
+            return res;
         }
     }
 }

@@ -84,6 +84,16 @@ namespace MadhurAPI.Services.Repository
             response.Message = "Successfully Registered.\n Login Id : " + member.MemberId + " \n Password : " + member.Password;
             return response;
         }
+        public async Task<IEnumerable<StateMaster>> GetState()
+        {
+            var state = await _dbContext.StateMaster.ToListAsync();
+            return state;
+        }
+        public async Task<IEnumerable<DistrictMaster>> GetDistrict(int state_code)
+        {
+            var district = await _dbContext.DistrictMaster.Where(x => x.state_code == state_code).ToListAsync();
+            return district;
+        }
         public async Task<ForgetPasswordDTO> ForgetPassword(string MobileNo, string dob)
         {
             var response = new ForgetPasswordDTO();
