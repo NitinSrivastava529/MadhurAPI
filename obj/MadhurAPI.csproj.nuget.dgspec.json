@@ -53,6 +53,10 @@
               "target": "Package",
               "version": "[13.0.1, )"
             },
+            "Fingers10.ExcelExport": {
+              "target": "Package",
+              "version": "[3.0.1, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.11, )"

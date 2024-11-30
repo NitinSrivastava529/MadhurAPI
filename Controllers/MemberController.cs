@@ -1,4 +1,5 @@
-﻿using MadhurAPI.Models;
+﻿using Fingers10.ExcelExport.ActionResults;
+using MadhurAPI.Models;
 using MadhurAPI.Models.DTO;
 using MadhurAPI.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +22,7 @@ namespace MadhurAPI.Controllers
         [HttpGet("GetBanner")]
         public async Task<IActionResult> GetBanner()
         {
-            return Ok(await _repository.GetBanner());
+            return Ok(await _repository.GetBanner());          
         }
         [HttpGet("GenerateKey")]
         public async Task<IActionResult> GenerateKey()
@@ -260,6 +261,19 @@ namespace MadhurAPI.Controllers
         public async Task<IActionResult> ResetDistributorReward(string distributorId)
         {
             var result = await _repository.ResetDistributorReward(distributorId);
+            return Ok(result);
+        }
+
+        [HttpDelete("DeleteReward")]
+        public async Task<IActionResult> DeleteReward(int AutoId)
+        {
+            var result = await _repository.DeleteReward(AutoId);
+            return Ok(result);
+        }
+        [HttpPut("EditReward")]
+        public async Task<IActionResult> EditReward(int AutoId, string Remark)
+        {
+            var result = await _repository.EditReward(AutoId, Remark);
             return Ok(result);
         }
     }

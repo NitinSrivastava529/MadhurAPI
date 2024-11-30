@@ -1,4 +1,5 @@
-﻿using MadhurAPI.Models;
+﻿using Fingers10.ExcelExport.ActionResults;
+using MadhurAPI.Models;
 using MadhurAPI.Models.DTO;
 using MadhurAPI.Services.Interface;
 using Microsoft.AspNetCore.Http;
@@ -64,6 +65,12 @@ namespace MadhurAPI.Controllers
             {
                 return BadRequest(ex);
             }
+        }
+        [HttpGet("DownloadState")]
+        public async Task<IActionResult> DownloadState()
+        {
+            var result = await _repository.GetState();
+            return new CSVResult<StateMaster>(result,"StateList");
         }
         [HttpGet("GetDistrict/{StateCode}")]
         public async Task<IActionResult> GetDistrict(int StateCode)

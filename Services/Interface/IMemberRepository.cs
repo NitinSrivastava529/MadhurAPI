@@ -33,5 +33,7 @@ namespace MadhurAPI.Services.Interface
         Task<Response> ApproveReward(RewardDistributorDTO obj);
         Task<IEnumerable<RewardDistributorInfoDTO>> RewardDistributorInfo(string distributorId);
         Task<string> ResetDistributorReward(string distributorId);
+        Task<string> DeleteReward(int AutoId);
+        Task<string> EditReward(int AutoId, string Remark);
     }
 }

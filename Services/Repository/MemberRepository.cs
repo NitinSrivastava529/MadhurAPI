@@ -237,13 +237,13 @@ namespace MadhurAPI.Services.Repository
         public async Task<Response> AddReward(RewardMasterDTO dto)
         {
             var response = new Response();
-            if (_dbContext.RewardMaster.Count(x => x.MemberId == dto.MemberId && x.level == dto.level) >0)
+            if (_dbContext.RewardMaster.Count(x => x.MemberId == dto.MemberId && x.level == dto.level) > 0)
             {
                 response.message = "This Reward Already Exists";
                 response.result = false;
                 return response;
             }
-          
+
             var folderName = Path.Combine("Resource", "Reward");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
             if (!Directory.Exists(pathToSave))
@@ -363,6 +363,28 @@ namespace MadhurAPI.Services.Repository
                 total = 0
             };
             return res;
+        }
+        public async Task<string> DeleteReward(int AutoId)
+        {
+            var res = await _dbContext.RewardMaster.Where(x => x.AutoId == AutoId).FirstOrDefaultAsync();
+            if (res == null)
+                return "Not Found";
+            _dbContext.RewardMaster.Remove(res);
+            await _dbContext.SaveChangesAsync();
+
+            return "Success";
+        }
+        public async Task<string> EditReward(int AutoId, string Remark)
+        {
+            var res = await _dbContext.RewardMaster.Where(x => x.AutoId == AutoId).FirstOrDefaultAsync();
+            if (res == null)
+                return "Not Found";
+            res.Remark = Remark;
+
+            _dbContext.RewardMaster.Update(res);
+            await _dbContext.SaveChangesAsync();
+
+            return "Success";
         }
     }
 }
