@@ -22,7 +22,7 @@ namespace MadhurAPI.Controllers
         [HttpGet("GetBanner")]
         public async Task<IActionResult> GetBanner()
         {
-            return Ok(await _repository.GetBanner());          
+            return Ok(await _repository.GetBanner());
         }
         [HttpGet("GenerateKey")]
         public async Task<IActionResult> GenerateKey()
@@ -153,23 +153,11 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
-       
+
         [HttpGet("RegKeys")]
-        public async Task<IActionResult> RegKeys()
+        public async Task<IActionResult> RegKeys(char param)
         {
-            try
-            {
-                var result = await _repository.RegKeys();
-                if (result == null)
-                {
-                    return NotFound();
-                }
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            return Ok(await _repository.RegKeys(param));
         }
         [HttpGet("GetMember/{memberId}")]
         public async Task<IActionResult> GetMember(string memberId)

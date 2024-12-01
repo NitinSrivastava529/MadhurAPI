@@ -54,9 +54,10 @@ namespace MadhurAPI.Services.Repository
             };
             return result;
         }
-        public async Task<IEnumerable<RegKey>> RegKeys()
+        public async Task<IEnumerable<RegKey>> RegKeys(char param)
         {
-            var RegKeys = await _dbContext.RegKeys.OrderByDescending(x => x.AuotId).ToListAsync();
+            var RegKeys = await _dbContext.RegKeys.Where(x => x.IsCopy == param)
+                            .OrderByDescending(x => x.AuotId).ToListAsync();
             return RegKeys;
         }
 

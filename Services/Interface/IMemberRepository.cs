@@ -6,7 +6,7 @@ namespace MadhurAPI.Services.Interface
     public interface IMemberRepository
     {
         Task<IEnumerable<MemberDTO>> GetMembers(FilterDTO obj);
-        Task<IEnumerable<RegKey>> RegKeys();
+        Task<IEnumerable<RegKey>> RegKeys(char param);
         Task<TotalKeyDTO> TotalKey();
         Task<TotalCount> TotalCount();
         Task<Member> GetMember(string memberId);

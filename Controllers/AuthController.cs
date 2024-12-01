@@ -69,8 +69,9 @@ namespace MadhurAPI.Controllers
         [HttpGet("DownloadState")]
         public async Task<IActionResult> DownloadState()
         {
-            var result = await _repository.GetState();
-            return new CSVResult<StateMaster>(result,"StateList");
+            var result = await _repository.GetState();                        
+           // return new CSVResult<StateMaster>(result,"StateList");
+            return new ExcelResult<StateMaster>(result, "Demo Sheet Name", "Fingers10");
         }
         [HttpGet("GetDistrict/{StateCode}")]
         public async Task<IActionResult> GetDistrict(int StateCode)

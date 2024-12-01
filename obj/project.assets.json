@@ -9730,6 +9730,7 @@
       "AutoMapper >= 13.0.1",
       "Fingers10.ExcelExport >= 3.0.1",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.11",
+      "Microsoft.AspNetCore.Mvc.Abstractions >= 2.2.0",
       "Microsoft.EntityFrameworkCore >= 9.0.0-rc.1.24451.1",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.0-rc.1.24451.1",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.0-rc.1.24451.1",
@@ -9797,6 +9798,10 @@
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
             "version": "[8.0.11, )"
+          },
+          "Microsoft.AspNetCore.Mvc.Abstractions": {
+            "target": "Package",
+            "version": "[2.2.0, )"
           },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
