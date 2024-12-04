@@ -264,5 +264,42 @@ namespace MadhurAPI.Controllers
             var result = await _repository.EditReward(AutoId, Remark);
             return Ok(result);
         }
+        [HttpGet("GetVideo")]
+        public async Task<IActionResult> GetVideo()
+        {
+            var result = await _repository.GetVideo();
+            return Ok(result);
+        }
+        [HttpPost("AddVideo")]
+        public async Task<IActionResult> AddVideo(string code)
+        {
+            var result = await _repository.AddVideo(code);
+            return Ok(result);
+        }
+        [HttpDelete("DeleteVideo")]
+        public async Task<IActionResult> DeleteVideo(string code)
+        {
+            var result = await _repository.DeleteVideo(code);
+            return Ok(result);
+        }
+        [HttpGet("GetTermsCondition")]
+        public async Task<IActionResult> GetTermsCondition()
+        {
+            var result = await _repository.GetTermsCondition();
+            return Ok(result);
+        }
+        [HttpPost("AddTerms")]
+        public async Task<IActionResult> AddTerms(string content)
+        {
+            var result = await _repository.AddTerms(content);
+            return Ok(result);
+        }
+        [HttpDelete("DeleteTerms")]
+        public async Task<IActionResult> DeleteTerms(int id)
+        {
+            var result = await _repository.DeleteTerms(id);
+            return Ok(result);
+        }
+
     }
 }

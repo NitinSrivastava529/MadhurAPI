@@ -12,9 +12,7 @@ namespace MadhurAPI.Services.Interface
         Task<Member> GetMember(string memberId);
         Task<IEnumerable<Member>> GetRepurchase(string memberId);
         Task<TotalRepurchaseDTO> TotalRepurchase();
-    
         Task<IEnumerable<MemberDTO>> GetTodayMembers();
-           
         Task<Response> Repurchase(string MemberId, string RegKey);
         Task<Member> UpdateMember(Member member);
         Task<bool> UpdateRegKeys(int[] AutoId);
@@ -35,5 +33,11 @@ namespace MadhurAPI.Services.Interface
         Task<string> ResetDistributorReward(string distributorId);
         Task<string> DeleteReward(int AutoId);
         Task<string> EditReward(int AutoId, string Remark);
+        Task<IEnumerable<YoutubeVideo>> GetVideo();
+        Task<string> AddVideo(string code);
+        Task<string> DeleteVideo(string code);
+        Task<IEnumerable<TermsCondition>> GetTermsCondition();
+        Task<string> AddTerms(string content);
+        Task<string> DeleteTerms(int id);
     }
 }

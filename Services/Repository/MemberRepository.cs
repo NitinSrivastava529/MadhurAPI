@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using AutoMapper.Execution;
 using Member = MadhurAPI.Models.Member;
 using MadhurAPI.Migrations;
+using DocumentFormat.OpenXml.Drawing.Charts;
 
 namespace MadhurAPI.Services.Repository
 {
@@ -385,6 +386,50 @@ namespace MadhurAPI.Services.Repository
             _dbContext.RewardMaster.Update(res);
             await _dbContext.SaveChangesAsync();
 
+            return "Success";
+        }
+        public async Task<IEnumerable<YoutubeVideo>> GetVideo()
+        {
+           return await _dbContext.YoutubeVideo.ToListAsync();
+        }
+        public async Task<string> AddVideo(string code)
+        {
+            var data = new YoutubeVideo()
+            {
+                code = code
+            };
+            var res = await _dbContext.YoutubeVideo.AddAsync(data);  
+           await _dbContext.SaveChangesAsync();
+
+            return "Success";
+        }
+        public async Task<string> DeleteVideo(string code)
+        {
+            var data = await _dbContext.YoutubeVideo.Where(x => x.code == code).FirstOrDefaultAsync();
+            _dbContext.YoutubeVideo.Remove(data);
+            await _dbContext.SaveChangesAsync();
+            return "Success";
+        }
+        public async Task<IEnumerable<TermsCondition>> GetTermsCondition()
+        {
+            return await _dbContext.TermsCondition.ToListAsync();
+        }
+        public async Task<string> AddTerms(string content)
+        {
+            var data = _mapper.Map<TermsCondition>(content);
+            var res = await _dbContext.TermsCondition.AddAsync(data);
+            if (res == null)
+                return "Not Found";
+
+            await _dbContext.SaveChangesAsync();
+
+            return "Success";
+        }
+        public async Task<string> DeleteTerms(int id)
+        {
+            var data = await _dbContext.TermsCondition.Where(x => x.Id == id).FirstOrDefaultAsync();
+            _dbContext.TermsCondition.Remove(data);
+            await _dbContext.SaveChangesAsync();
             return "Success";
         }
     }
