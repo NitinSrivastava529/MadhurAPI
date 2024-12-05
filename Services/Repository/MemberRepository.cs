@@ -410,19 +410,19 @@ namespace MadhurAPI.Services.Repository
             await _dbContext.SaveChangesAsync();
             return "Success";
         }
-        public async Task<IEnumerable<TermsCondition>> GetTermsCondition()
+        public async Task<TermsCondition> GetTermsCondition()
         {
-            return await _dbContext.TermsCondition.ToListAsync();
+            return await _dbContext.TermsCondition.FirstOrDefaultAsync();
         }
         public async Task<string> AddTerms(string content)
         {
-            var data = _mapper.Map<TermsCondition>(content);
-            var res = await _dbContext.TermsCondition.AddAsync(data);
-            if (res == null)
-                return "Not Found";
-
+            var terms=_dbContext.TermsCondition.ToList();
+            _dbContext.TermsCondition.RemoveRange(terms);
             await _dbContext.SaveChangesAsync();
 
+            var data =new TermsCondition() { content = content };
+            var res = await _dbContext.TermsCondition.AddAsync(data);          
+            await _dbContext.SaveChangesAsync();
             return "Success";
         }
         public async Task<string> DeleteTerms(int id)

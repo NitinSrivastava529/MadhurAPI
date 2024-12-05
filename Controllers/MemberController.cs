@@ -289,9 +289,9 @@ namespace MadhurAPI.Controllers
             return Ok(result);
         }
         [HttpPost("AddTerms")]
-        public async Task<IActionResult> AddTerms(string content)
+        public async Task<IActionResult> AddTerms([FromBody]TermsCondition obj)
         {
-            var result = await _repository.AddTerms(content);
+            var result = await _repository.AddTerms(obj.content);
             return Ok(result);
         }
         [HttpDelete("DeleteTerms")]

@@ -36,7 +36,7 @@ namespace MadhurAPI.Services.Interface
         Task<IEnumerable<YoutubeVideo>> GetVideo();
         Task<string> AddVideo(string code);
         Task<string> DeleteVideo(string code);
-        Task<IEnumerable<TermsCondition>> GetTermsCondition();
+        Task<TermsCondition> GetTermsCondition();
         Task<string> AddTerms(string content);
         Task<string> DeleteTerms(int id);
     }
