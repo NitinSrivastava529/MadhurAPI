@@ -24,22 +24,11 @@ namespace MadhurAPI.Controllers
         {
             return Ok(await _repository.GetBanner());
         }
-        [HttpGet("GenerateKey")]
-        public async Task<IActionResult> GenerateKey()
+        [HttpPost("GenerateKey")]
+        public async Task<IActionResult> GenerateKey([FromBody]int NoOfKey)
         {
-            try
-            {
-                var data = await _repository.GenerateKey();
-                if (data == null)
-                {
-                    return NotFound("Data Not Found");
-                }
-                return Ok(data);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex);
-            }
+            var data = await _repository.GenerateKey(NoOfKey);
+            return Ok(data);
         }
         [HttpGet("TotalCount")]
         public async Task<IActionResult> TotalCount()
@@ -210,9 +199,9 @@ namespace MadhurAPI.Controllers
             }
         }
         [HttpPut("UpdateRegKeys")]
-        public async Task<IActionResult> UpdateRegKeys([FromBody] int[] AutotId)
+        public async Task<IActionResult> UpdateRegKeys([FromBody] string[] keys)
         {
-            await _repository.UpdateRegKeys(AutotId);
+            await _repository.UpdateRegKeys(keys);
             return Ok();
         }
         [HttpPost("AddReward")]

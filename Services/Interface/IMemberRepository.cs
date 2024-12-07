@@ -15,7 +15,7 @@ namespace MadhurAPI.Services.Interface
         Task<IEnumerable<MemberDTO>> GetTodayMembers();
         Task<Response> Repurchase(string MemberId, string RegKey);
         Task<Member> UpdateMember(Member member);
-        Task<bool> UpdateRegKeys(int[] AutoId);
+        Task<bool> UpdateRegKeys(string[] keys);
         Task<string> UpdateStatus(string memberId);
         Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId);
         Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId);
@@ -26,7 +26,7 @@ namespace MadhurAPI.Services.Interface
         Task<IEnumerable<LevelWiseMemberDTO>> LevelWiseMember(string Prm1);
         Task<Response> AddReward(RewardMasterDTO dto);
         Task<IEnumerable<RewardMaster>> GetReward(string MemberId);
-        Task<Response> GenerateKey();
+        Task<Response> GenerateKey(int NoOfKey);
         Task<IEnumerable<BannerMaster>> GetBanner();
         Task<Response> ApproveReward(RewardDistributorDTO obj);
         Task<IEnumerable<RewardDistributorInfoDTO>> RewardDistributorInfo(string distributorId);

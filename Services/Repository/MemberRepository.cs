@@ -159,33 +159,34 @@ namespace MadhurAPI.Services.Repository
             await _dbContext.SaveChangesAsync();
             return member;
         }
-        public async Task<bool> UpdateRegKeys(int[] AutoId)
+        public async Task<bool> UpdateRegKeys(string[] keys)
         {
-            _dbContext.RegKeys.Where(x => AutoId.Contains(x.AuotId)).ToList().ForEach(a => a.IsCopy = 'Y');
+            _dbContext.RegKeys.Where(x => keys.Contains(x.Key)).ToList().ForEach(a => a.IsCopy = 'Y');
             await _dbContext.SaveChangesAsync();
             return true;
         }
-        public async Task<Response> GenerateKey()
+        public async Task<Response> GenerateKey(int NoOfKey)
         {
+           List<string> list = new();
             var response = new Response();
-            string key = NewRegKey();
-            int count = await _dbContext.RegKeys.CountAsync(x => x.Key == key) + await _dbContext.Members.CountAsync(x => x.RegPin == key);
-            if (count == 0)
+            for(var i=0;i<NoOfKey; i++)
             {
-                var keys = new RegKey()
+                string key = NewRegKey();
+                int count = await _dbContext.RegKeys.CountAsync(x => x.Key == key) + await _dbContext.Members.CountAsync(x => x.RegPin == key);
+                if (count == 0)
                 {
-                    Key = key,
-                    CreationDate = DateTime.Now
-                };
-                response.message = key;
-                response.result = true;
-                await _dbContext.RegKeys.AddAsync(keys);
-                await _dbContext.SaveChangesAsync();
+                    var keys = new RegKey()
+                    {
+                        Key = key,
+                        CreationDate = DateTime.Now
+                    };                    
+                    await _dbContext.RegKeys.AddAsync(keys);
+                    await _dbContext.SaveChangesAsync();
+                    list.Add(key);
+                }                
             }
-            else
-            {
-                await GenerateKey();
-            }
+            response.message =string.Join(",", list.ToArray());
+            response.result = true;
             return response;
         }
         public string NewRegKey()
