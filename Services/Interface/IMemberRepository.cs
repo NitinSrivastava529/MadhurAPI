@@ -33,11 +33,15 @@ namespace MadhurAPI.Services.Interface
         Task<string> ResetDistributorReward(string distributorId);
         Task<string> DeleteReward(int AutoId);
         Task<string> EditReward(int AutoId, string Remark);
-        Task<IEnumerable<YoutubeVideo>> GetVideo();
-        Task<string> AddVideo(string code);
-        Task<string> DeleteVideo(string code);
+        Task<IEnumerable<Plan>> GetPlan(string type);
+        Task<string> AddPlan(IFormFile file, string type);
+        Task<string> DeletePlan(int Id);
         Task<TermsCondition> GetTermsCondition();
         Task<string> AddTerms(string content);
         Task<string> DeleteTerms(int id);
+        Task<IEnumerable<StoreMaster>> GetStore();
+        Task<IEnumerable<StoreMaster>> GetStore(string state, string city);
+        Task<string> AddStore(StoreMaster obj);
+        Task<string> DeleteStore(int Id);
     }
 }

@@ -5,6 +5,7 @@ using MadhurAPI.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace MadhurAPI.Controllers
 {
@@ -253,22 +254,22 @@ namespace MadhurAPI.Controllers
             var result = await _repository.EditReward(AutoId, Remark);
             return Ok(result);
         }
-        [HttpGet("GetVideo")]
-        public async Task<IActionResult> GetVideo()
+        [HttpGet("GetPlan")]
+        public async Task<IActionResult> GetPlan(string type)
         {
-            var result = await _repository.GetVideo();
+            var result = await _repository.GetPlan(type);
             return Ok(result);
         }
-        [HttpPost("AddVideo")]
-        public async Task<IActionResult> AddVideo(string code)
+        [HttpPost("AddPlan")]
+        public async Task<IActionResult> AddPlan([FromForm] UploadPlanDTO obj)
         {
-            var result = await _repository.AddVideo(code);
+            var result = await _repository.AddPlan(obj.file, obj.type);
             return Ok(result);
         }
-        [HttpDelete("DeleteVideo")]
-        public async Task<IActionResult> DeleteVideo(string code)
+        [HttpDelete("DeletePlan")]
+        public async Task<IActionResult> DeletePlan(int Id)
         {
-            var result = await _repository.DeleteVideo(code);
+            var result = await _repository.DeletePlan(Id);
             return Ok(result);
         }
         [HttpGet("GetTermsCondition")]
@@ -289,6 +290,30 @@ namespace MadhurAPI.Controllers
             var result = await _repository.DeleteTerms(id);
             return Ok(result);
         }
-
+        //Store Master
+        [HttpGet("GetStore")]
+        public async Task<IActionResult> GetStore()
+        {
+            var result = await _repository.GetStore();
+            return Ok(result);
+        }
+        [HttpGet("GetStore/{state}/{city}")]
+        public async Task<IActionResult> GetStore(string state, string city)
+        {
+            var result = await _repository.GetStore(state, city);
+            return Ok(result);
+        }
+        [HttpPost("AddStore")]
+        public async Task<IActionResult> AddStore([FromBody] StoreMaster obj)
+        {
+            var result = await _repository.AddStore(obj);
+            return Ok(result);
+        }
+        [HttpDelete("DeleteStore/{id:int}")]
+        public async Task<IActionResult> DeleteStore(int id)
+        {
+            var result = await _repository.DeleteStore(id);
+            return Ok(result);
+        }
     }
 }

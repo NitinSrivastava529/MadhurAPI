@@ -91,7 +91,7 @@ app.MapControllers();
 app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions()
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resource\Reward")),
-    RequestPath = new PathString("/Resource/Reward")
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resource")),
+    RequestPath = new PathString("/Resource")
 });
 app.Run();

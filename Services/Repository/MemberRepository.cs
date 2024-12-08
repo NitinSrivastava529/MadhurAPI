@@ -13,6 +13,7 @@ using AutoMapper.Execution;
 using Member = MadhurAPI.Models.Member;
 using MadhurAPI.Migrations;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace MadhurAPI.Services.Repository
 {
@@ -167,9 +168,9 @@ namespace MadhurAPI.Services.Repository
         }
         public async Task<Response> GenerateKey(int NoOfKey)
         {
-           List<string> list = new();
+            List<string> list = new();
             var response = new Response();
-            for(var i=0;i<NoOfKey; i++)
+            for (var i = 0; i < NoOfKey; i++)
             {
                 string key = NewRegKey();
                 int count = await _dbContext.RegKeys.CountAsync(x => x.Key == key) + await _dbContext.Members.CountAsync(x => x.RegPin == key);
@@ -179,13 +180,13 @@ namespace MadhurAPI.Services.Repository
                     {
                         Key = key,
                         CreationDate = DateTime.Now
-                    };                    
+                    };
                     await _dbContext.RegKeys.AddAsync(keys);
                     await _dbContext.SaveChangesAsync();
                     list.Add(key);
-                }                
+                }
             }
-            response.message =string.Join(",", list.ToArray());
+            response.message = string.Join(",", list.ToArray());
             response.result = true;
             return response;
         }
@@ -389,25 +390,51 @@ namespace MadhurAPI.Services.Repository
 
             return "Success";
         }
-        public async Task<IEnumerable<YoutubeVideo>> GetVideo()
+        public async Task<IEnumerable<Plan>> GetPlan(string type)
         {
-           return await _dbContext.YoutubeVideo.ToListAsync();
+            return await _dbContext.Plan.Where(x => x.type == type).ToListAsync();
         }
-        public async Task<string> AddVideo(string code)
+        public async Task<string> AddPlan(IFormFile file, string type)
         {
-            var data = new YoutubeVideo()
+            if (type == "Pdf")
             {
-                code = code
-            };
-            var res = await _dbContext.YoutubeVideo.AddAsync(data);  
-           await _dbContext.SaveChangesAsync();
+                var folderName = Path.Combine("Resource", "Plan");
+                var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+                if (!Directory.Exists(pathToSave))
+                {
+                    Directory.CreateDirectory(pathToSave);
+                }
+                var fullPath = Path.Combine(pathToSave, file.FileName);
 
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                var data = new Plan()
+                {
+                    file = file.FileName,
+                    type = "Pdf"
+                };
+                var res = await _dbContext.Plan.AddAsync(data);
+                await _dbContext.SaveChangesAsync();
+            }
+            if (type != "Pdf")
+            {
+                var data = new Plan()
+                {
+                    file = type,
+                    type = "Youtube"
+                };
+                var res = await _dbContext.Plan.AddAsync(data);
+                await _dbContext.SaveChangesAsync();
+            }
             return "Success";
         }
-        public async Task<string> DeleteVideo(string code)
+        public async Task<string> DeletePlan(int Id)
         {
-            var data = await _dbContext.YoutubeVideo.Where(x => x.code == code).FirstOrDefaultAsync();
-            _dbContext.YoutubeVideo.Remove(data);
+            var data = await _dbContext.Plan.Where(x => x.Id == Id).FirstOrDefaultAsync();
+            _dbContext.Plan.Remove(data);
             await _dbContext.SaveChangesAsync();
             return "Success";
         }
@@ -417,12 +444,12 @@ namespace MadhurAPI.Services.Repository
         }
         public async Task<string> AddTerms(string content)
         {
-            var terms=_dbContext.TermsCondition.ToList();
+            var terms = _dbContext.TermsCondition.ToList();
             _dbContext.TermsCondition.RemoveRange(terms);
             await _dbContext.SaveChangesAsync();
 
-            var data =new TermsCondition() { content = content };
-            var res = await _dbContext.TermsCondition.AddAsync(data);          
+            var data = new TermsCondition() { content = content };
+            var res = await _dbContext.TermsCondition.AddAsync(data);
             await _dbContext.SaveChangesAsync();
             return "Success";
         }
@@ -432,6 +459,38 @@ namespace MadhurAPI.Services.Repository
             _dbContext.TermsCondition.Remove(data);
             await _dbContext.SaveChangesAsync();
             return "Success";
+        }
+        //Store Master
+        public async Task<IEnumerable<StoreMaster>> GetStore()
+        {
+            return await _dbContext.StoreMaster.ToListAsync();
+        }
+        public async Task<IEnumerable<StoreMaster>> GetStore(string state, string city)
+        {
+            return await _dbContext.StoreMaster.Where(x => x.State == state && x.City == city).ToListAsync();
+        }
+        public async Task<string> AddStore(StoreMaster obj)
+        { var res = string.Empty;
+            if (obj.AutoId == 0)
+            {
+                obj.StoreId = "STR" + $"{(_dbContext.StoreMaster.Count() + 1):D7}";
+                var result = await _dbContext.StoreMaster.AddAsync(obj);                
+                res = result.ToString();
+            }
+            else
+            {                
+                var result = _dbContext.StoreMaster.Update(obj);                
+                res = result.ToString();
+            }
+            await _dbContext.SaveChangesAsync();
+            return res;
+        }
+        public async Task<string> DeleteStore(int Id)
+        {
+            var store = _dbContext.StoreMaster.Where(x => x.AutoId == Id).FirstOrDefault();
+            _dbContext.StoreMaster.Remove(store);
+            var result = await _dbContext.SaveChangesAsync();
+            return result.ToString();
         }
     }
 }

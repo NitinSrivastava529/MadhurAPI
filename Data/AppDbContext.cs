@@ -17,8 +17,9 @@ namespace MadhurAPI.Data
         public DbSet<RewardMaster> RewardMaster { get; set; }
         public DbSet<BannerMaster> BannerMaster { get; set; }
         public DbSet<RewardDistributor> RewardDistributor { get; set; }
-        public DbSet<YoutubeVideo> YoutubeVideo { get; set; }
+        public DbSet<Plan> Plan { get; set; }
         public DbSet<TermsCondition> TermsCondition { get; set; }
+        public DbSet<StoreMaster> StoreMaster { get; set; }
 
         //DTOs
         public DbSet<AllMemberDTO> AllMember { get; set; }
