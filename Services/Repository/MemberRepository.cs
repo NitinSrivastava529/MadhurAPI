@@ -465,9 +465,9 @@ namespace MadhurAPI.Services.Repository
         {
             return await _dbContext.StoreMaster.ToListAsync();
         }
-        public async Task<IEnumerable<StoreMaster>> GetStore(string state, string city)
+        public async Task<IEnumerable<StoreMaster>> GetStore(string param)
         {
-            return await _dbContext.StoreMaster.Where(x => x.State == state && x.City == city).ToListAsync();
+            return await _dbContext.StoreMaster.Where(x => x.State == param || x.City == param || x.PinCode==param).ToListAsync();
         }
         public async Task<string> AddStore(StoreMaster obj)
         { var res = string.Empty;

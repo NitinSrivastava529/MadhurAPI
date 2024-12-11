@@ -40,7 +40,7 @@ namespace MadhurAPI.Services.Interface
         Task<string> AddTerms(string content);
         Task<string> DeleteTerms(int id);
         Task<IEnumerable<StoreMaster>> GetStore();
-        Task<IEnumerable<StoreMaster>> GetStore(string state, string city);
+        Task<IEnumerable<StoreMaster>> GetStore(string param);
         Task<string> AddStore(StoreMaster obj);
         Task<string> DeleteStore(int Id);
     }

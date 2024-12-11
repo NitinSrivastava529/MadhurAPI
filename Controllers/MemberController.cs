@@ -297,10 +297,10 @@ namespace MadhurAPI.Controllers
             var result = await _repository.GetStore();
             return Ok(result);
         }
-        [HttpGet("GetStore/{state}/{city}")]
-        public async Task<IActionResult> GetStore(string state, string city)
+        [HttpGet("GetStore/{param}")]
+        public async Task<IActionResult> GetStore(string param)
         {
-            var result = await _repository.GetStore(state, city);
+            var result = await _repository.GetStore(param);
             return Ok(result);
         }
         [HttpPost("AddStore")]
