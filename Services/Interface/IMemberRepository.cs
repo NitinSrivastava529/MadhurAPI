@@ -10,6 +10,7 @@ namespace MadhurAPI.Services.Interface
         Task<TotalKeyDTO> TotalKey();
         Task<TotalCount> TotalCount();
         Task<Member> GetMember(string memberId);
+        Task<IEnumerable<MemberDTO>> GetMembersActive(char param);
         Task<IEnumerable<Member>> GetRepurchase(string memberId);
         Task<TotalRepurchaseDTO> TotalRepurchase();
         Task<IEnumerable<MemberDTO>> GetTodayMembers();

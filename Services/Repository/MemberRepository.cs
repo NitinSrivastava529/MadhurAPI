@@ -38,6 +38,14 @@ namespace MadhurAPI.Services.Repository
                                  select mem).AsNoTracking().Skip((obj.PageNo - 1) * obj.PageSize).Take(obj.PageSize).ToListAsync();
             return _mapper.Map<IEnumerable<MemberDTO>>(members);
         }
+        public async Task<IEnumerable<MemberDTO>> GetMembersActive(char param)
+        {
+            var members = await (from mem in _dbContext.Members
+                                 where (mem.IsActive == param)
+                                 orderby mem.RefId
+                                 select mem).AsNoTracking().ToListAsync();
+            return _mapper.Map<IEnumerable<MemberDTO>>(members);
+        }
         public async Task<IEnumerable<MemberDTO>> GetTodayMembers()
         {
             var members = await (from mem in _dbContext.Members
@@ -467,19 +475,20 @@ namespace MadhurAPI.Services.Repository
         }
         public async Task<IEnumerable<StoreMaster>> GetStore(string param)
         {
-            return await _dbContext.StoreMaster.Where(x => x.State == param || x.City == param || x.PinCode==param).ToListAsync();
+            return await _dbContext.StoreMaster.Where(x => x.State == param || x.StoreId == param || x.type == param || x.Mobile == param || x.City == param || x.PinCode == param).ToListAsync();
         }
         public async Task<string> AddStore(StoreMaster obj)
-        { var res = string.Empty;
+        {
+            var res = string.Empty;
             if (obj.AutoId == 0)
             {
                 obj.StoreId = "STR" + $"{(_dbContext.StoreMaster.Count() + 1):D7}";
-                var result = await _dbContext.StoreMaster.AddAsync(obj);                
+                var result = await _dbContext.StoreMaster.AddAsync(obj);
                 res = result.ToString();
             }
             else
-            {                
-                var result = _dbContext.StoreMaster.Update(obj);                
+            {
+                var result = _dbContext.StoreMaster.Update(obj);
                 res = result.ToString();
             }
             await _dbContext.SaveChangesAsync();

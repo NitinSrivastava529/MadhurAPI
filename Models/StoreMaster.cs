@@ -23,5 +23,6 @@ namespace MadhurAPI.Models
         public string? City { get; set; }
         [Column(TypeName = "varchar(6)")]
         public string? PinCode { get; set; }
+        public string? type { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace MadhurAPI.Models.DTO
         public string? MemberId { get; set; }
         public string? MemberName { get; set; }       
         public string? MobileNo { get; set; }     
+        public string? IsActive { get; set; }     
         public DateTime? CreationDate { get; set; }
     }
 }

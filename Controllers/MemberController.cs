@@ -71,6 +71,12 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
+        [HttpGet("GetMembersActive/{param}")]
+        public async Task<IActionResult> GetMembersActive(char param)
+        {
+            var result = await _repository.GetMembersActive(param);
+            return Ok(result);
+        }
         [HttpGet("LevelCount/{MemberId}")]
         public async Task<IActionResult> LevelCount(string MemberId)
         {
