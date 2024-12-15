@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace MadhurAPI.Models
 {
-    public class RewardDistributor
+    public class KycDocument
     {
         [Key]
         [Column(TypeName = "bigint")]
@@ -11,9 +11,10 @@ namespace MadhurAPI.Models
         public int AutoId { get; set; }
         [Column(TypeName = "varchar(30)")]
         public string MemberId { get; set; }
+        [Column(TypeName = "varchar(100)")]
+        public string file { get; set; }
         [Column(TypeName = "varchar(30)")]
-        public string StoreId { get; set; }
-        public string Level { get; set; }
+        public string type { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime CreationDate { get; set; } = DateTime.Now;
     }

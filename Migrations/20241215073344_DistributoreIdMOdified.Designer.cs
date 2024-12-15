@@ -4,6 +4,7 @@ using MadhurAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MadhurAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241215073344_DistributoreIdMOdified")]
+    partial class DistributoreIdMOdified
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,34 +174,6 @@ namespace MadhurAPI.Migrations
                     b.HasKey("recid");
 
                     b.ToTable("DistrictMaster");
-                });
-
-            modelBuilder.Entity("MadhurAPI.Models.KycDocument", b =>
-                {
-                    b.Property<long>("AutoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("AutoId"));
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("MemberId")
-                        .IsRequired()
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<string>("file")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("type")
-                        .IsRequired()
-                        .HasColumnType("varchar(30)");
-
-                    b.HasKey("AutoId");
-
-                    b.ToTable("KycDocument");
                 });
 
             modelBuilder.Entity("MadhurAPI.Models.Member", b =>

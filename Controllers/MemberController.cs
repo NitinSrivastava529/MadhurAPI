@@ -26,7 +26,7 @@ namespace MadhurAPI.Controllers
             return Ok(await _repository.GetBanner());
         }
         [HttpPost("GenerateKey")]
-        public async Task<IActionResult> GenerateKey([FromBody]int NoOfKey)
+        public async Task<IActionResult> GenerateKey([FromBody] int NoOfKey)
         {
             var data = await _repository.GenerateKey(NoOfKey);
             return Ok(data);
@@ -71,10 +71,10 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpGet("GetMembersActive/{param}")]
-        public async Task<IActionResult> GetMembersActive(char param)
+        [HttpGet("GetMembersInactive")]
+        public async Task<IActionResult> GetMembersInactive()
         {
-            var result = await _repository.GetMembersActive(param);
+            var result = await _repository.GetMembersInactive();
             return Ok(result);
         }
         [HttpGet("LevelCount/{MemberId}")]
@@ -236,15 +236,15 @@ namespace MadhurAPI.Controllers
             return Ok(result);
         }
         [HttpGet("RewardDistributorInfo")]
-        public async Task<IActionResult> RewardDistributorInfo(string distributorId)
+        public async Task<IActionResult> RewardDistributorInfo(string storeId)
         {
-            var result = await _repository.RewardDistributorInfo(distributorId);
+            var result = await _repository.RewardDistributorInfo(storeId);
             return Ok(result);
         }
         [HttpDelete("ResetDistributorReward")]
-        public async Task<IActionResult> ResetDistributorReward(string distributorId)
+        public async Task<IActionResult> ResetDistributorReward(string storeId)
         {
-            var result = await _repository.ResetDistributorReward(distributorId);
+            var result = await _repository.ResetDistributorReward(storeId);
             return Ok(result);
         }
 
@@ -285,7 +285,7 @@ namespace MadhurAPI.Controllers
             return Ok(result);
         }
         [HttpPost("AddTerms")]
-        public async Task<IActionResult> AddTerms([FromBody]TermsCondition obj)
+        public async Task<IActionResult> AddTerms([FromBody] TermsCondition obj)
         {
             var result = await _repository.AddTerms(obj.content);
             return Ok(result);
@@ -301,6 +301,12 @@ namespace MadhurAPI.Controllers
         public async Task<IActionResult> GetStore()
         {
             var result = await _repository.GetStore();
+            return Ok(result);
+        }
+        [HttpGet("RewardStoreTotal")]
+        public async Task<IActionResult> RewardStoreTotal()
+        {
+            var result = await _repository.RewardStoreTotal();
             return Ok(result);
         }
         [HttpGet("GetStore/{param}")]
@@ -320,6 +326,23 @@ namespace MadhurAPI.Controllers
         {
             var result = await _repository.DeleteStore(id);
             return Ok(result);
+        }
+        [HttpGet("GetKyc/{memberId}")]
+        public async Task<IActionResult> GetKyc(string memberId)
+        {
+            var result = await _repository.GetKyc(memberId);
+            return Ok(result);
+        }
+        [HttpPost("AddKyc")]
+        public async Task<IActionResult> AddKyc([FromForm] KycDocumentDTO dto)
+        {
+            var result = await _repository.AddKyc(dto);
+            return Ok(result);
+        }
+        [HttpDelete("DeleteKyc/{autoId:int}")]
+        public void DeleteKyc(int autoId)
+        {
+            _repository.DeleteKyc(autoId);
         }
     }
 }

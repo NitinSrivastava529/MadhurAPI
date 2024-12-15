@@ -10,7 +10,7 @@ namespace MadhurAPI.Services.Interface
         Task<TotalKeyDTO> TotalKey();
         Task<TotalCount> TotalCount();
         Task<Member> GetMember(string memberId);
-        Task<IEnumerable<MemberDTO>> GetMembersActive(char param);
+        Task<IEnumerable<MemberDTO>> GetMembersInactive();
         Task<IEnumerable<Member>> GetRepurchase(string memberId);
         Task<TotalRepurchaseDTO> TotalRepurchase();
         Task<IEnumerable<MemberDTO>> GetTodayMembers();
@@ -30,8 +30,8 @@ namespace MadhurAPI.Services.Interface
         Task<Response> GenerateKey(int NoOfKey);
         Task<IEnumerable<BannerMaster>> GetBanner();
         Task<Response> ApproveReward(RewardDistributorDTO obj);
-        Task<IEnumerable<RewardDistributorInfoDTO>> RewardDistributorInfo(string distributorId);
-        Task<string> ResetDistributorReward(string distributorId);
+        Task<IEnumerable<RewardDistributorInfoDTO>> RewardDistributorInfo(string storeId);
+        Task<string> ResetDistributorReward(string storeId);
         Task<string> DeleteReward(int AutoId);
         Task<string> EditReward(int AutoId, string Remark);
         Task<IEnumerable<Plan>> GetPlan(string type);
@@ -42,7 +42,11 @@ namespace MadhurAPI.Services.Interface
         Task<string> DeleteTerms(int id);
         Task<IEnumerable<StoreMaster>> GetStore();
         Task<IEnumerable<StoreMaster>> GetStore(string param);
+        Task<IEnumerable<RewardStoreTotalDTO>> RewardStoreTotal();
         Task<string> AddStore(StoreMaster obj);
         Task<string> DeleteStore(int Id);
+        Task<string> AddKyc(KycDocumentDTO dto);
+        Task<IEnumerable<KycDocument>> GetKyc(string memberId);
+        void DeleteKyc(int AutoId);
     }
 }

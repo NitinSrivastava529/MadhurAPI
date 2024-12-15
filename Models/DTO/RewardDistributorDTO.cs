@@ -4,7 +4,7 @@
     {
         public string? key { get; set; }
         public string? MemberId { get; set; }
-        public string? DistributorId { get; set; }
+        public string? StoreId { get; set; }
         public string? Level { get; set; }
     }
 }

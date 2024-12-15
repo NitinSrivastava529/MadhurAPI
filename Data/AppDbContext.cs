@@ -20,6 +20,7 @@ namespace MadhurAPI.Data
         public DbSet<Plan> Plan { get; set; }
         public DbSet<TermsCondition> TermsCondition { get; set; }
         public DbSet<StoreMaster> StoreMaster { get; set; }
+        public DbSet<KycDocument> KycDocument { get; set; }
 
         //DTOs
         public DbSet<AllMemberDTO> AllMember { get; set; }

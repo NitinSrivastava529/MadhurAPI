@@ -67,7 +67,7 @@ namespace MadhurAPI.Services.Repository
             //    return response;
             //}
 
-            member.MemberId = "MAC" + $"{(_dbContext.Members.Count() + 1):D7}";
+            member.MemberId = "MAC" + $"{(_dbContext.Members.Count() + 1):D10}";
 
             var result = _dbContext.Members.AddAsync(member);
             await _dbContext.SaveChangesAsync();

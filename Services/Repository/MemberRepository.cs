@@ -14,6 +14,9 @@ using Member = MadhurAPI.Models.Member;
 using MadhurAPI.Migrations;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.EntityFrameworkCore.Internal;
+using MadhurAPI.Utility;
 
 namespace MadhurAPI.Services.Repository
 {
@@ -38,12 +41,9 @@ namespace MadhurAPI.Services.Repository
                                  select mem).AsNoTracking().Skip((obj.PageNo - 1) * obj.PageSize).Take(obj.PageSize).ToListAsync();
             return _mapper.Map<IEnumerable<MemberDTO>>(members);
         }
-        public async Task<IEnumerable<MemberDTO>> GetMembersActive(char param)
+        public async Task<IEnumerable<MemberDTO>> GetMembersInactive()
         {
-            var members = await (from mem in _dbContext.Members
-                                 where (mem.IsActive == param)
-                                 orderby mem.RefId
-                                 select mem).AsNoTracking().ToListAsync();
+            var members = await _dbContext.Members.Where(x => x.IsActive == 'N').AsNoTracking().ToListAsync();
             return _mapper.Map<IEnumerable<MemberDTO>>(members);
         }
         public async Task<IEnumerable<MemberDTO>> GetTodayMembers()
@@ -282,7 +282,9 @@ namespace MadhurAPI.Services.Repository
         }
         public async Task<IEnumerable<RewardMaster>> GetReward(string MemberId)
         {
-            var data = await _dbContext.RewardMaster.Where(x => (MemberId != "ALL") ? x.MemberId == MemberId : x.MemberId != null).ToListAsync();
+            var data = await _dbContext.RewardMaster
+                .Where(x => (MemberId != "ALL") ? x.MemberId == MemberId : x.MemberId != null)
+                .ToListAsync();
             return data;
         }
         public async Task<IEnumerable<BannerMaster>> GetBanner()
@@ -319,9 +321,9 @@ namespace MadhurAPI.Services.Repository
             }
 
 
-            if (_dbContext.Members.Count(x => x.MemberId == obj.DistributorId) == 0)
+            if (_dbContext.StoreMaster.Count(x => x.StoreId == obj.StoreId) == 0)
             {
-                response.message = "Invalid Distributor Id";
+                response.message = "Invalid Store Id";
                 response.result = false;
                 return response;
             }
@@ -353,14 +355,25 @@ namespace MadhurAPI.Services.Repository
             response.result = true;
             return response;
         }
-        public async Task<IEnumerable<RewardDistributorInfoDTO>> RewardDistributorInfo(string distributorId)
+        public async Task<IEnumerable<RewardStoreTotalDTO>> RewardStoreTotal()
         {
-            var data = await _dbContext.RewardDistributor.Where(x => x.DistributorId == distributorId).ToListAsync();
+            var data = await (from s in _dbContext.RewardDistributor
+                              group s by s.StoreId into g
+                              select new RewardStoreTotalDTO
+                              {
+                                  storeId = g.Key,
+                                  total = g.Sum(x => Convert.ToInt32(x.Level))
+                              }).ToListAsync();
+            return data;
+        }
+        public async Task<IEnumerable<RewardDistributorInfoDTO>> RewardDistributorInfo(string storeId)
+        {
+            var data = await _dbContext.RewardDistributor.Where(x => x.StoreId == storeId).ToListAsync();
             return _mapper.Map<IEnumerable<RewardDistributorInfoDTO>>(data);
         }
-        public async Task<string> ResetDistributorReward(string distributorId)
+        public async Task<string> ResetDistributorReward(string storeId)
         {
-            var data = await _dbContext.RewardDistributor.Where(x => x.DistributorId == distributorId).ToListAsync();
+            var data = await _dbContext.RewardDistributor.Where(x => x.StoreId == storeId).ToListAsync();
             _dbContext.RewardDistributor.RemoveRange(data);
             await _dbContext.SaveChangesAsync();
             return "Success";
@@ -500,6 +513,32 @@ namespace MadhurAPI.Services.Repository
             _dbContext.StoreMaster.Remove(store);
             var result = await _dbContext.SaveChangesAsync();
             return result.ToString();
+        }
+        public async Task<string> AddKyc(KycDocumentDTO dto)
+        {
+            var fileName = dto.memberId + '_' + dto.type+ Path.GetExtension(dto.file.FileName);
+            FileUpload.upload(dto.file, fileName);
+
+            var data = new KycDocument()
+            {
+                MemberId = dto.memberId,
+                file = fileName,
+                type = dto.type
+            };
+            var res = await _dbContext.KycDocument.AddAsync(data);
+            await _dbContext.SaveChangesAsync();
+            return "Success";
+        }
+        public async Task<IEnumerable<KycDocument>> GetKyc(string memberId)
+        {
+            return await _dbContext.KycDocument.Where(x => x.MemberId == memberId).ToListAsync();
+        }
+        public void DeleteKyc(int AutoId)
+        {
+            var kyc = _dbContext.KycDocument.Where(x => x.AutoId == AutoId).FirstOrDefault();
+            _dbContext.KycDocument.Remove(kyc);
+            _dbContext.SaveChanges();
+
         }
     }
 }
