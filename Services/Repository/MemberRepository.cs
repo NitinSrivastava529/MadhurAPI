@@ -218,6 +218,7 @@ namespace MadhurAPI.Services.Repository
         public async Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId)
         {
             var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},AllMember").ToListAsync();
+            
             return data;
         }
         public async Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId)

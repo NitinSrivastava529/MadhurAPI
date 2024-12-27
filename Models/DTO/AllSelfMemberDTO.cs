@@ -11,6 +11,7 @@ namespace MadhurAPI.Models.DTO
         public string? MemberName { get; set; }      
         public string? MobileNo { get; set; }
         public string? City { get; set; }
-        public int? total { get; set; }       
+        public int? mTotal { get; set; }       
+        public int? pTotal { get; set; }       
     }
 }

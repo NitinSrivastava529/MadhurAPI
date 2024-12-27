@@ -7,7 +7,9 @@ namespace MadhurAPI.Models.DTO
     [Keyless]
     public class LevelCount
     {
-        public int? Level { get; set; }
-        public int? Total { get; set; }
+        public int level { get; set; }
+        public int member { get; set; }
+        public int purchase { get; set; }
+        public int total { get; set; }
     }
 }
