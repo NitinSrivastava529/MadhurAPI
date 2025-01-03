@@ -37,6 +37,7 @@ namespace MadhurAPI.Services.Repository
                                  || (!string.IsNullOrEmpty(obj.Mobile) ? mem.Address.ToLower().Contains(obj.Mobile.ToLower()) : mem.Address != null)
                                  || (!string.IsNullOrEmpty(obj.Mobile) ? mem.State.ToLower().Contains(obj.Mobile.ToLower()) : mem.State != null)
                                  || (!string.IsNullOrEmpty(obj.Mobile) ? mem.City.ToLower().Contains(obj.Mobile.ToLower()) : mem.City != null)
+                                 || (!string.IsNullOrEmpty(obj.Mobile) ? mem.RegPin.ToLower().Contains(obj.Mobile.ToLower()) : mem.RegPin != null)
                                  orderby mem.RefId
                                  select mem).AsNoTracking().Skip((obj.PageNo - 1) * obj.PageSize).Take(obj.PageSize).ToListAsync();
             return _mapper.Map<IEnumerable<MemberDTO>>(members);
