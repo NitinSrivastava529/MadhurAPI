@@ -53,7 +53,11 @@ namespace MadhurAPI.Models
         public string? RelationWithNominee { get; set; }
 
         [Column(TypeName = "char(1)")]
-        public char? IsActive { get; set; } = 'Y';
+        public char? IsActive { get; set; } = 'Y';   
+        
+        [Column(TypeName = "char(1)")]
+        public char? IsSubscribe { get; set; } = 'N';
+
         [Column(TypeName = "varchar(20)")]
         public string? MemberType { get; set; } = "Member";
 

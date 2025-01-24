@@ -205,6 +205,19 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
+        [HttpPut("UpdateSubscribe/{memberid}")]
+        public async Task<IActionResult> UpdateSubscribe(string memberid)
+        {
+            try
+            {
+                await _repository.UpdateSubscribe(memberid);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
         [HttpPut("UpdateRegKeys")]
         public async Task<IActionResult> UpdateRegKeys([FromBody] string[] keys)
         {

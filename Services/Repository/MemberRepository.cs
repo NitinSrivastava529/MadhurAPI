@@ -155,6 +155,16 @@ namespace MadhurAPI.Services.Repository
             }
             return "Success";
         }
+        public async Task<string> UpdateSubscribe(string memberId)
+        {
+            var result = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);
+            if (result != null)
+            {
+                result.IsSubscribe = result.IsSubscribe.Equals('Y') ? 'N' : 'Y';
+                await _dbContext.SaveChangesAsync();
+            }
+            return "Success";
+        }
         public async Task<Member> UpdateMember(Member member)
         {
             var result = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == member.MemberId);
