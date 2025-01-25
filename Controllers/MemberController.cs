@@ -155,6 +155,11 @@ namespace MadhurAPI.Controllers
         {
             return Ok(await _repository.RegKeys(param));
         }
+        [HttpGet("GetSubscribe")]
+        public async Task<IActionResult> GetSubscribe()
+        {
+            return Ok(await _repository.GetSubscribe());
+        }
         [HttpGet("GetMember/{memberId}")]
         public async Task<IActionResult> GetMember(string memberId)
         {

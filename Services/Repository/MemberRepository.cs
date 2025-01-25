@@ -229,7 +229,7 @@ namespace MadhurAPI.Services.Repository
         public async Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId)
         {
             var data = await _dbContext.AllMember.FromSqlInterpolated($"exec pRecursiveQueries {MemberId},{"-"},AllMember").ToListAsync();
-            
+
             return data;
         }
         public async Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId)
@@ -528,7 +528,7 @@ namespace MadhurAPI.Services.Repository
         }
         public async Task<string> AddKyc(KycDocumentDTO dto)
         {
-            var fileName = dto.memberId + '_' + dto.type+ Path.GetExtension(dto.file.FileName);
+            var fileName = dto.memberId + '_' + dto.type + Path.GetExtension(dto.file.FileName);
             FileUpload.upload(dto.file, fileName);
 
             var data = new KycDocument()
@@ -544,6 +544,19 @@ namespace MadhurAPI.Services.Repository
         public async Task<IEnumerable<KycDocument>> GetKyc(string memberId)
         {
             return await _dbContext.KycDocument.Where(x => x.MemberId == memberId).ToListAsync();
+        }
+        public async Task<IEnumerable<KycDocument>> GetSubscribe()
+        {
+            var data = (from kd in _dbContext.KycDocument
+                        join mem in _dbContext.Members on kd.MemberId equals mem.MemberId
+                        where (kd.type.ToLower()== "subscribe" && mem.IsSubscribe == 'N')
+                        select new KycDocument()
+                        {
+                            MemberId = kd.MemberId,
+                            file = kd.file,
+                            type = kd.type
+                        }).ToListAsync();            
+            return await data;
         }
         public void DeleteKyc(int AutoId)
         {

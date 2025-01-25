@@ -19,6 +19,7 @@ namespace MadhurAPI.Services.Interface
         Task<bool> UpdateRegKeys(string[] keys);
         Task<string> UpdateStatus(string memberId);
         Task<string> UpdateSubscribe(string memberId);
+        Task<IEnumerable<KycDocument>> GetSubscribe();
         Task<IEnumerable<AllMemberDTO>> AllMember(string MemberId);
         Task<IEnumerable<AllSelfMemberDTO>> AllSelfMember(string MemberId);
         Task<IEnumerable<AllMemberDTO>> AllSelfMemberAdmin(string MemberId);
