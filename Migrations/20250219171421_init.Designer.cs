@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MadhurAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241123114308_RewardDistributorAdded")]
-    partial class RewardDistributorAdded
+    [Migration("20250219171421_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,6 +56,9 @@ namespace MadhurAPI.Migrations
 
             modelBuilder.Entity("MadhurAPI.Models.DTO.AllMemberDTO", b =>
                 {
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MemberId")
                         .HasColumnType("nvarchar(max)");
 
@@ -66,9 +69,6 @@ namespace MadhurAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RefId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("city")
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("AllMember");
@@ -88,7 +88,10 @@ namespace MadhurAPI.Migrations
                     b.Property<string>("MobileNo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("total")
+                    b.Property<int?>("mTotal")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("pTotal")
                         .HasColumnType("int");
 
                     b.ToTable("AllSelfMember");
@@ -96,10 +99,16 @@ namespace MadhurAPI.Migrations
 
             modelBuilder.Entity("MadhurAPI.Models.DTO.LevelCount", b =>
                 {
-                    b.Property<int?>("Level")
+                    b.Property<int>("level")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Total")
+                    b.Property<int>("member")
+                        .HasColumnType("int");
+
+                    b.Property<int>("purchase")
+                        .HasColumnType("int");
+
+                    b.Property<int>("total")
                         .HasColumnType("int");
 
                     b.ToTable("LevelCount");
@@ -176,6 +185,34 @@ namespace MadhurAPI.Migrations
                     b.ToTable("DistrictMaster");
                 });
 
+            modelBuilder.Entity("MadhurAPI.Models.KycDocument", b =>
+                {
+                    b.Property<long>("AutoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("AutoId"));
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("file")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("varchar(30)");
+
+                    b.HasKey("AutoId");
+
+                    b.ToTable("KycDocument");
+                });
+
             modelBuilder.Entity("MadhurAPI.Models.Member", b =>
                 {
                     b.Property<long>("AutoId")
@@ -198,6 +235,9 @@ namespace MadhurAPI.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("IsActive")
+                        .HasColumnType("char(1)");
+
+                    b.Property<string>("IsSubscribe")
                         .HasColumnType("char(1)");
 
                     b.Property<string>("MemberId")
@@ -223,7 +263,7 @@ namespace MadhurAPI.Migrations
                         .HasColumnType("varchar(6)");
 
                     b.Property<string>("RefId")
-                        .HasColumnType("varchar(10)")
+                        .HasColumnType("varchar(20)")
                         .HasColumnOrder(2);
 
                     b.Property<string>("RegPin")
@@ -242,6 +282,27 @@ namespace MadhurAPI.Migrations
                     b.HasKey("AutoId");
 
                     b.ToTable("Members");
+                });
+
+            modelBuilder.Entity("MadhurAPI.Models.Plan", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("file")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Plan");
                 });
 
             modelBuilder.Entity("MadhurAPI.Models.RegKey", b =>
@@ -279,15 +340,15 @@ namespace MadhurAPI.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("DistributorId")
-                        .IsRequired()
-                        .HasColumnType("varchar(30)");
-
                     b.Property<string>("Level")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<string>("StoreId")
                         .IsRequired()
                         .HasColumnType("varchar(30)");
 
@@ -350,6 +411,62 @@ namespace MadhurAPI.Migrations
                     b.HasKey("RecId");
 
                     b.ToTable("StateMaster");
+                });
+
+            modelBuilder.Entity("MadhurAPI.Models.StoreMaster", b =>
+                {
+                    b.Property<long>("AutoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("AutoId"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Mobile")
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("PinCode")
+                        .HasColumnType("varchar(6)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("StoreId")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("StoreName")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AutoId");
+
+                    b.ToTable("StoreMaster");
+                });
+
+            modelBuilder.Entity("MadhurAPI.Models.TermsCondition", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TermsCondition");
                 });
 #pragma warning restore 612, 618
         }

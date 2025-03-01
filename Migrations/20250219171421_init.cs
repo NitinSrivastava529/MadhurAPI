@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace MadhurAPI.Migrations
 {
     /// <inheritdoc />
@@ -19,7 +21,7 @@ namespace MadhurAPI.Migrations
                     MemberName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MobileNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    city = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -33,10 +35,24 @@ namespace MadhurAPI.Migrations
                     MemberName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MobileNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    total = table.Column<int>(type: "int", nullable: true)
+                    mTotal = table.Column<int>(type: "int", nullable: true),
+                    pTotal = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BannerMaster",
+                columns: table => new
+                {
+                    AutoId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Banner = table.Column<string>(type: "varchar(200)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BannerMaster", x => x.AutoId);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,11 +71,29 @@ namespace MadhurAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "KycDocument",
+                columns: table => new
+                {
+                    AutoId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MemberId = table.Column<string>(type: "varchar(30)", nullable: false),
+                    file = table.Column<string>(type: "varchar(100)", nullable: false),
+                    type = table.Column<string>(type: "varchar(30)", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KycDocument", x => x.AutoId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LevelCount",
                 columns: table => new
                 {
-                    Level = table.Column<int>(type: "int", nullable: true),
-                    Total = table.Column<int>(type: "int", nullable: true)
+                    level = table.Column<int>(type: "int", nullable: false),
+                    member = table.Column<int>(type: "int", nullable: false),
+                    purchase = table.Column<int>(type: "int", nullable: false),
+                    total = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -83,8 +117,7 @@ namespace MadhurAPI.Migrations
                     MemberId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MemberName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MobileNo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    levelCount = table.Column<int>(type: "int", nullable: true)
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -97,8 +130,8 @@ namespace MadhurAPI.Migrations
                     AutoId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RegPin = table.Column<string>(type: "varchar(10)", nullable: true),
-                    RefId = table.Column<string>(type: "varchar(10)", nullable: true),
-                    MemberId = table.Column<string>(type: "varchar(10)", nullable: true),
+                    RefId = table.Column<string>(type: "varchar(20)", nullable: true),
+                    MemberId = table.Column<string>(type: "varchar(20)", nullable: true),
                     MemberName = table.Column<string>(type: "varchar(50)", nullable: true),
                     Password = table.Column<string>(type: "nvarchar(20)", nullable: true),
                     MobileNo = table.Column<string>(type: "varchar(10)", nullable: true),
@@ -111,11 +144,27 @@ namespace MadhurAPI.Migrations
                     Nominee = table.Column<string>(type: "varchar(50)", nullable: true),
                     RelationWithNominee = table.Column<string>(type: "varchar(20)", nullable: true),
                     IsActive = table.Column<string>(type: "char(1)", nullable: true),
+                    IsSubscribe = table.Column<string>(type: "char(1)", nullable: true),
+                    MemberType = table.Column<string>(type: "varchar(20)", nullable: true),
                     CreationDate = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Members", x => x.AutoId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Plan",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    file = table.Column<string>(type: "nvarchar(200)", nullable: false),
+                    type = table.Column<string>(type: "varchar(20)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Plan", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -134,6 +183,22 @@ namespace MadhurAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RewardDistributor",
+                columns: table => new
+                {
+                    AutoId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MemberId = table.Column<string>(type: "varchar(30)", nullable: false),
+                    StoreId = table.Column<string>(type: "varchar(30)", nullable: false),
+                    Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RewardDistributor", x => x.AutoId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RewardMaster",
                 columns: table => new
                 {
@@ -143,6 +208,7 @@ namespace MadhurAPI.Migrations
                     level = table.Column<string>(type: "varchar(5)", nullable: true),
                     Remark = table.Column<string>(type: "nvarchar(500)", nullable: true),
                     file_path = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsApproved = table.Column<string>(type: "nvarchar(1)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -178,6 +244,48 @@ namespace MadhurAPI.Migrations
                 {
                     table.PrimaryKey("PK_StateMaster", x => x.RecId);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "StoreMaster",
+                columns: table => new
+                {
+                    AutoId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StoreId = table.Column<string>(type: "varchar(20)", nullable: false),
+                    StoreName = table.Column<string>(type: "varchar(100)", nullable: false),
+                    Mobile = table.Column<string>(type: "varchar(10)", nullable: true),
+                    Address = table.Column<string>(type: "varchar(200)", nullable: true),
+                    State = table.Column<string>(type: "varchar(50)", nullable: true),
+                    City = table.Column<string>(type: "varchar(50)", nullable: true),
+                    PinCode = table.Column<string>(type: "varchar(6)", nullable: true),
+                    type = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StoreMaster", x => x.AutoId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TermsCondition",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    content = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TermsCondition", x => x.Id);
+                });
+
+            migrationBuilder.InsertData(
+                table: "BannerMaster",
+                columns: new[] { "AutoId", "Banner" },
+                values: new object[,]
+                {
+                    { 1L, "slider1.png" },
+                    { 2L, "slider2.png" }
+                });
         }
 
         /// <inheritdoc />
@@ -190,7 +298,13 @@ namespace MadhurAPI.Migrations
                 name: "AllSelfMember");
 
             migrationBuilder.DropTable(
+                name: "BannerMaster");
+
+            migrationBuilder.DropTable(
                 name: "DistrictMaster");
+
+            migrationBuilder.DropTable(
+                name: "KycDocument");
 
             migrationBuilder.DropTable(
                 name: "LevelCount");
@@ -205,7 +319,13 @@ namespace MadhurAPI.Migrations
                 name: "Members");
 
             migrationBuilder.DropTable(
+                name: "Plan");
+
+            migrationBuilder.DropTable(
                 name: "RegKeys");
+
+            migrationBuilder.DropTable(
+                name: "RewardDistributor");
 
             migrationBuilder.DropTable(
                 name: "RewardMaster");
@@ -215,6 +335,12 @@ namespace MadhurAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "StateMaster");
+
+            migrationBuilder.DropTable(
+                name: "StoreMaster");
+
+            migrationBuilder.DropTable(
+                name: "TermsCondition");
         }
     }
 }

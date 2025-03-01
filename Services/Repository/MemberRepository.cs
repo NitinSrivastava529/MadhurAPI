@@ -11,7 +11,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using AutoMapper.Execution;
 using Member = MadhurAPI.Models.Member;
-using MadhurAPI.Migrations;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
