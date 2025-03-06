@@ -178,6 +178,21 @@ namespace MadhurAPI.Services.Repository
             await _dbContext.SaveChangesAsync();
             return member;
         }
+        public async Task<Member> UpdateMemberByAdmin(Member member)
+        {
+            var result = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == member.MemberId);
+            if (result != null)
+            {
+                result.MemberName = member.MemberName;
+                result.dob = member.dob;
+                result.Address = member.Address;             
+                result.PinCode = member.PinCode;
+                result.Nominee = member.Nominee;
+                result.RelationWithNominee = member.RelationWithNominee;
+            }
+            await _dbContext.SaveChangesAsync();
+            return member;
+        }
         public async Task<bool> UpdateRegKeys(string[] keys)
         {
             _dbContext.RegKeys.Where(x => keys.Contains(x.Key)).ToList().ForEach(a => a.IsCopy = 'Y');
