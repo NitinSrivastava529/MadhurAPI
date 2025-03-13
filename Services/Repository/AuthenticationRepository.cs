@@ -81,7 +81,7 @@ namespace MadhurAPI.Services.Repository
             }
             response.MemberId = member.MemberId;
             response.Password = member.Password;
-            response.Message = "Successfully Registered.\n Login Id : " + member.MemberId + " \n Password : " + member.Password;
+            response.Message = "Congratulations !Successfully Registered.\n Login Id : " + member.MemberId + " \n Password : " + member.Password;
             return response;
         }
         public async Task<IEnumerable<StateMaster>> GetState()
