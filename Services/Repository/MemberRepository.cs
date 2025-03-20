@@ -186,6 +186,7 @@ namespace MadhurAPI.Services.Repository
                 result.MemberName = member.MemberName;
                 result.dob = member.dob;
                 result.Address = member.Address;             
+                result.MobileNo = member.MobileNo;             
                 result.PinCode = member.PinCode;
                 result.Nominee = member.Nominee;
                 result.RelationWithNominee = member.RelationWithNominee;
@@ -542,13 +543,13 @@ namespace MadhurAPI.Services.Repository
         }
         public async Task<string> AddKyc(KycDocumentDTO dto)
         {
-            var fileName = dto.memberId + '_' + dto.type + Path.GetExtension(dto.file.FileName);
-            FileUpload.upload(dto.file, fileName);
+            //var fileName = dto.memberId + '_' + dto.type + Path.GetExtension(dto.file.FileName);
+            //FileUpload.upload(dto.file, fileName);
 
             var data = new KycDocument()
             {
                 MemberId = dto.memberId,
-                file = fileName,
+                file = "-",
                 type = dto.type
             };
             var res = await _dbContext.KycDocument.AddAsync(data);
