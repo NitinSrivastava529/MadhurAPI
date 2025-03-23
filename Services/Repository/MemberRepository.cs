@@ -185,8 +185,27 @@ namespace MadhurAPI.Services.Repository
             {
                 result.MemberName = member.MemberName;
                 result.dob = member.dob;
-                result.Address = member.Address;             
-                result.MobileNo = member.MobileNo;             
+                result.Address = member.Address;
+                result.MobileNo = member.MobileNo;
+                result.PinCode = member.PinCode;
+                result.Nominee = member.Nominee;
+                result.RelationWithNominee = member.RelationWithNominee;
+            }
+            await _dbContext.SaveChangesAsync();
+            return member;
+        }
+        public async Task<Member> UpdateMemberByUser(Member member)
+        {
+            var result = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == member.MemberId);
+            if (result != null)
+            {
+                result.MemberName = member.MemberName;
+                result.MobileNo = member.MobileNo;
+                result.dob = member.dob;
+                result.AadharNo = member.AadharNo;
+                result.State = member.State;
+                result.City = member.City;
+                result.Address = member.Address;
                 result.PinCode = member.PinCode;
                 result.Nominee = member.Nominee;
                 result.RelationWithNominee = member.RelationWithNominee;
@@ -564,13 +583,13 @@ namespace MadhurAPI.Services.Repository
         {
             var data = (from kd in _dbContext.KycDocument
                         join mem in _dbContext.Members on kd.MemberId equals mem.MemberId
-                        where (kd.type.ToLower()== "subscribe" && mem.IsSubscribe == 'N')
+                        where (kd.type.ToLower() == "subscribe" && mem.IsSubscribe == 'N')
                         select new KycDocument()
                         {
                             MemberId = kd.MemberId,
                             file = kd.file,
                             type = kd.type
-                        }).ToListAsync();            
+                        }).ToListAsync();
             return await data;
         }
         public void DeleteKyc(int AutoId)

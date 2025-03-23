@@ -210,6 +210,19 @@ namespace MadhurAPI.Controllers
                 return BadRequest(ex);
             }
         }
+        [HttpPut("UpdateMemberByUser")]
+        public async Task<IActionResult> UpdateMemberByUser([FromBody] Member member)
+        {
+            try
+            {
+                var result = await _repository.UpdateMemberByUser(member);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex);
+            }
+        }
         [HttpPut("UpdateStatus/{memberid}")]
         public async Task<IActionResult> UpdateStatus(string memberid)
         {

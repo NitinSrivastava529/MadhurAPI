@@ -17,6 +17,7 @@ namespace MadhurAPI.Services.Interface
         Task<Response> Repurchase(string MemberId, string RegKey);
         Task<Member> UpdateMember(Member member);
         Task<Member> UpdateMemberByAdmin(Member member);
+        Task<Member> UpdateMemberByUser(Member member);
         Task<bool> UpdateRegKeys(string[] keys);
         Task<string> UpdateStatus(string memberId);
         Task<string> UpdateSubscribe(string memberId);
