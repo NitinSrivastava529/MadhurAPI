@@ -13,7 +13,7 @@ namespace MadhurAPI.Services.Repository
     public class AuthenticationRepository : IAuthenticationRepository
     {
         private readonly AppDbContext _dbContext; private readonly IMapper _mapper;
-        public AuthenticationRepository(AppDbContext dbContext,IMapper mapper)
+        public AuthenticationRepository(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -48,7 +48,11 @@ namespace MadhurAPI.Services.Repository
                 response.Message = "Registration Pin Not Valid";
                 return response;
             }
-
+            if (_dbContext.StoreMaster.Count(x => x.StoreId == member.StoreId) == 0)
+            {
+                response.Message = "StoreId Not Valid";
+                return response;
+            }
             if (_dbContext.Members.Count(x => x.RegPin == member.RegPin) > 0)
             {
                 response.Message = "This Registration Pin Already Used";
@@ -73,6 +77,12 @@ namespace MadhurAPI.Services.Repository
             await _dbContext.SaveChangesAsync();
             if (result.IsCompleted)
             {
+                var storeKeyInfo = new StorekeyInfo()
+                {
+                    StoreId = member.StoreId,
+                    MemberId = member.MemberId
+                };
+                _dbContext.StorekeyInfo.Add(storeKeyInfo);
                 var dataKey = await _dbContext.RegKeys.FirstOrDefaultAsync(x => x.Key == member.RegPin);
                 if (dataKey != null)
                     _dbContext.RegKeys.Remove(dataKey);
@@ -108,7 +118,7 @@ namespace MadhurAPI.Services.Repository
                 return response;
             }
 
-            var data = await _dbContext.Members.FirstOrDefaultAsync(x => x.MobileNo == MobileNo && x.dob == Convert.ToDateTime(dob));         
+            var data = await _dbContext.Members.FirstOrDefaultAsync(x => x.MobileNo == MobileNo && x.dob == Convert.ToDateTime(dob));
 
             response.MemberId = data.MemberId;
             response.Password = data.Password;

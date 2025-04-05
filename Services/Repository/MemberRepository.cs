@@ -101,7 +101,7 @@ namespace MadhurAPI.Services.Repository
             return result;
         }
 
-        public async Task<Response> Repurchase(string MemberId, string RegKey)
+        public async Task<Response> Repurchase(string MemberId, string RegKey, string StoreId)
         {
             var response = new Response();
             if (_dbContext.RegKeys.Count(x => x.Key == RegKey) == 0)
@@ -110,7 +110,11 @@ namespace MadhurAPI.Services.Repository
                 response.result = false;
                 return response;
             }
-
+            if (_dbContext.StoreMaster.Count(x => x.StoreId == StoreId) == 0)
+            {
+                response.message = "StoreId Not Valid";
+                return response;
+            }
             if (_dbContext.Members.Count(x => x.RegPin == RegKey) > 0)
             {
                 response.message = "This Registration Pin Already Used";
@@ -134,6 +138,13 @@ namespace MadhurAPI.Services.Repository
             await _dbContext.SaveChangesAsync();
             if (result.IsCompleted)
             {
+                var storeKeyInfo = new StorekeyInfo()
+                {
+                    StoreId = StoreId,
+                    MemberId = MemberId
+                };
+                _dbContext.StorekeyInfo.Add(storeKeyInfo);
+
                 var dataKey = await _dbContext.RegKeys.FirstOrDefaultAsync(x => x.Key == RegKey);
                 if (dataKey != null)
                     _dbContext.RegKeys.Remove(dataKey);
@@ -143,6 +154,18 @@ namespace MadhurAPI.Services.Repository
             response.message = "Successfully Repurchased";
             response.result = true;
             return response;
+        }
+        public async Task<IEnumerable<Object>> GetStorekeyAdmin(string StoreId)
+        {
+            var result = await (from s in _dbContext.StorekeyInfo
+                                join m in _dbContext.Members on s.MemberId equals m.MemberId
+                                where s.StoreId == StoreId
+                                select new
+                                {
+                                    MemberId = m.MemberId,
+                                    MemberName = m.MemberName
+                                }).ToListAsync();
+            return result;
         }
         public async Task<string> UpdateStatus(string memberId)
         {

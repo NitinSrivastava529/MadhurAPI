@@ -155,6 +155,11 @@ namespace MadhurAPI.Controllers
         {
             return Ok(await _repository.RegKeys(param));
         }
+        [HttpGet("GetStorekeyAdmin")]
+        public async Task<IActionResult> GetStorekeyAdmin(string storeId)
+        {
+            return Ok(await _repository.GetStorekeyAdmin(storeId));
+        }
         [HttpGet("GetSubscribe")]
         public async Task<IActionResult> GetSubscribe()
         {
@@ -179,9 +184,9 @@ namespace MadhurAPI.Controllers
         }
 
         [HttpPost("Repurchase")]
-        public async Task<IActionResult> Repurchase(string memberId, string RegKey)
+        public async Task<IActionResult> Repurchase(string memberId, string RegKey,string StoreId)
         {
-            Response result = await _repository.Repurchase(memberId, RegKey);
+            Response result = await _repository.Repurchase(memberId, RegKey, StoreId);
             return Ok(result);
         }
         [HttpPut("UpdateMember")]

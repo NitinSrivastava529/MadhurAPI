@@ -13,6 +13,9 @@ namespace MadhurAPI.Models
         [Column(TypeName = "varchar(10)", Order = 1)]
         public string? RegPin { get; set; }
 
+        [Column(TypeName = "varchar(20)", Order = 1)]
+        public string? StoreId { get; set; }
+
         [Column(TypeName = "varchar(20)", Order = 2)]
         public string? RefId { get; set; }
 
