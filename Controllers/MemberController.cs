@@ -54,6 +54,12 @@ namespace MadhurAPI.Controllers
             var data = await _repository.TotalKey();
             return Ok(data);
         }
+        [HttpDelete("ResetStorekeyAdmin")]
+        public async Task<IActionResult> ResetStorekeyAdmin(string StoreId)
+        {
+            var data = await _repository.ResetStorekeyAdmin(StoreId);
+            return Ok(data);
+        }
         [HttpPost("GetMembers")]
         public async Task<IActionResult> GetMembers([FromBody] FilterDTO obj)
         {
@@ -184,7 +190,7 @@ namespace MadhurAPI.Controllers
         }
 
         [HttpPost("Repurchase")]
-        public async Task<IActionResult> Repurchase(string memberId, string RegKey,string StoreId)
+        public async Task<IActionResult> Repurchase(string memberId, string RegKey, string StoreId)
         {
             Response result = await _repository.Repurchase(memberId, RegKey, StoreId);
             return Ok(result);

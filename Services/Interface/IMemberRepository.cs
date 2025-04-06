@@ -15,6 +15,7 @@ namespace MadhurAPI.Services.Interface
         Task<TotalRepurchaseDTO> TotalRepurchase();
         Task<IEnumerable<MemberDTO>> GetTodayMembers();
         Task<IEnumerable<Object>> GetStorekeyAdmin(string StoreId);
+        Task<Response> ResetStorekeyAdmin(string StoreId);
         Task<Response> Repurchase(string MemberId, string RegKey, string StoreId);
         Task<Member> UpdateMember(Member member);
         Task<Member> UpdateMemberByAdmin(Member member);

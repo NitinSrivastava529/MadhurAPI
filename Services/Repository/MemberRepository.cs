@@ -167,6 +167,22 @@ namespace MadhurAPI.Services.Repository
                                 }).ToListAsync();
             return result;
         }
+        public async Task<Response> ResetStorekeyAdmin(string StoreId)
+        {
+            var response = new Response();
+            if (_dbContext.StorekeyInfo.Count(x => x.StoreId == StoreId) == 0)
+            {
+                response.message = "StoreId Not Found";
+                response.result = false;
+                return response;
+            }
+            var data = await _dbContext.StorekeyInfo.Where(x => x.StoreId == StoreId).ToListAsync();
+            _dbContext.StorekeyInfo.RemoveRange(data);
+            await _dbContext.SaveChangesAsync();
+            response.message = "Successfully Reset";
+            response.result = true;
+            return response;
+        }
         public async Task<string> UpdateStatus(string memberId)
         {
             var result = await _dbContext.Members.FirstOrDefaultAsync(x => x.MemberId == memberId);
